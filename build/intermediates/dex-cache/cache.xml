@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="C:\Users\gouph\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\27.1.1\39ded76b5e1ce1c5b2688e1d25cdc20ecee32007\support-annotations-27.1.1.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="39ded76b5e1ce1c5b2688e1d25cdc20ecee32007">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\support-annotations-27.1.1_cc61d05227ce2f3653a46226891701ec7597f94d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\android.arch.lifecycle\runtime\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="e2bbe48deed35056023eed2cdc0cc92e5c7d3617">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\android.arch.lifecycle-runtime-1.1.0_770c1bb9e9b68795b4ef3816afdcfc7049a12f22.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\support-core-utils\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="ec657bb192b20229696216bf233779b16bf75a54">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-utils-27.1.1_a0501f6de019c7bb0ece50bf184ce38af4fe339d.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="2feadd535770271ca57b7b431f42151aa4af324a">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-animated-vector-drawable-27.1.1_cce175b512a9de4f53e59096819e05bd930d5004.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\support-fragment\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="3304d33470ff64cf83bce9189ff3648a42eb2aa7">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-support-fragment-27.1.1_e80d1c88fe272e5e8729b34f0e194fcbf058e2d2.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="c9a721adcd7dbae7a197b0ef81102336539f63ff">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-support-vector-drawable-27.1.1_35b5c69b468e726f77de7d6d75131a42e38eb757.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\android.arch.lifecycle\livedata-core\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="8a9fd7c97f1d13f97f3b52f9d2e54cd857d5acf9">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\android.arch.lifecycle-livedata-core-1.1.0_ef3aa2ad3fd373eac9863a384f83b52842d2e0a1.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\android.arch.core\runtime\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="71d380aeac037e63bab7bda2ba211777e16a2f42">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\android.arch.core-runtime-1.1.0_9845feec95c095922ebe07935386af7c7e7d0751.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="d968b9bd0011800e0d333d1571b8d34bcb8a0b6e">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-appcompat-v7-27.1.1_dc8e306000d2aec58de9cc62f68f5a038dbbcb52.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\support-compat\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="23dcb4803d3103bde3f3f5db978a726338fe49ae">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-support-compat-27.1.1_68e3757aaf1e5444ddce6fcbdaafe70dd0e78202.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\android.arch.lifecycle\viewmodel\1.1.0\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="1fd3ceac7f415975323d52c6c6057db409a907f6">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\android.arch.lifecycle-viewmodel-1.1.0_2071de78ed11b3cacf4c2fba0f0fe050cc049c65.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gouph\.gradle\caches\modules-2\files-2.1\android.arch.core\common\1.1.0\8007981f7d7540d89cd18471b8e5dcd2b4f99167\common-1.1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="8007981f7d7540d89cd18471b8e5dcd2b4f99167">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\common-1.1.0_d8f95cab33bcc4924f9edb95b747d08a4c653a4f.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\gamedev\platform-action\app\build\intermediates\exploded-aar\com.android.support\support-core-ui\27.1.1\jars\classes.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="874f1143c11f5d38533efe512bf913e3e847e7df">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\com.android.support-support-core-ui-27.1.1_6f898a8f549e910b2aa4b70f2cfe64eafefa88ec.jar" />
+    </item>
+    <item
+        is-multidex="false"
+        jar="C:\Users\gouph\.gradle\caches\modules-2\files-2.1\android.arch.lifecycle\common\1.1.0\edf3f7bfb84a7521d0599efa3b0113a0ee90f85\common-1.1.0.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="27.0.3"
+        sha1="0edf3f7bfb84a7521d0599efa3b0113a0ee90f85">
+        <dex dex="C:\gamedev\platform-action\app\build\intermediates\pre-dexed\debug\common-1.1.0_59154bf31e0e11f7f465a839cd8377e5065e6218.jar" />
+    </item>
+
+</items>

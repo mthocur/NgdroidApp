@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
         <activity android:name="com.mycompany.myngdroidapp.GameActivity"
-            android:screenOrientation="sensorPortrait" android:configChanges="orientation" android:theme="@style/Theme.AppCompat">
+            android:screenOrientation="landscape" android:configChanges="orientation" android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

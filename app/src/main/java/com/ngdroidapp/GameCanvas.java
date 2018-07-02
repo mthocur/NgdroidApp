@@ -2,10 +2,13 @@ package com.ngdroidapp;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
 import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
 import istanbul.gamelab.ngdroid.util.Utils;
+import mthocur.Background;
+import mthocur.Player;
 
 
 /**
@@ -16,32 +19,99 @@ import istanbul.gamelab.ngdroid.util.Utils;
 
 public class GameCanvas extends BaseCanvas {
 
-    private Bitmap logo;
-    private int logox, logoy, logow, logoh;
-
+    public Player player;
+    public Background mainBackground;
+    public Background controllerBg;
+    public int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
 
     public GameCanvas(NgApp ngApp) {
         super(ngApp);
     }
 
     public void setup() {
-        Log.i(TAG, "setup");
 
-        logo = Utils.loadImage(root,"gamelab-istanbul_logo.png");
-        logow = logo.getWidth();
-        logoh = logo.getHeight();
+        controllerBg = new Background(
+                Utils.loadImage(root,"controller.png"),
+                false,
+                Utils.loadImage(root,"controller.png").getWidth(),
+                Utils.loadImage(root,"controller.png").getHeight(),
+                128,
+                128,
+                0,
+                0,
+                0,
+                0,
+                new Rect(),
+                new Rect()
+        );
+
+        mainBackground = new Background(
+                Utils.loadImage(root,"ingame.png"),
+                false,
+                Utils.loadImage(root,"ingame.png").getWidth(),
+                Utils.loadImage(root,"ingame.png").getHeight(),
+                getWidth(),
+                getHeight(),
+                0,
+                0,
+                0,
+                0,
+                new Rect(),
+                new Rect()
+        );
+
+        player = new Player();
+        player.setAnimation(new Animation(
+                Utils.loadImage(root,"cowboy.png"),
+                new Rect(),new Rect(),
+                128,
+                128,
+                0,
+                0,
+                256,
+                256,
+                0,
+                0,
+                animationFrames,
+                256/16,
+                256/16,
+                1,
+                0,
+                2
+        ));
+
     }
 
     public void update() {
-        Log.i(TAG, "update");
+        if(player.getAnimation().getPlayStatus()){
+            player.getAnimation().playAnimation(true);
+        }else{
+            player.getAnimation().playAnimation(false);
+        }
+
+
+        //Log.i("----FRAME----",""+player.getAnimation().getCurrentFrame());
+
+
     }
 
     public void draw(Canvas canvas) {
-        Log.i(TAG, "draw");
 
-        logox = (getWidth() - logow) / 2;
-        logoy = (getHeight() - logoh) / 2;
-        canvas.drawBitmap(logo, logox, logoy, null);
+        mainBackground.drawBackground(canvas,getWidth(),getHeight());
+
+        controllerBg.drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                0,
+                getHeight()-controllerBg.getImage().getHeight(),
+                controllerBg.getImage().getHeight(),
+                getHeight()
+        );
+
+        player.getAnimation().drawToCanvas(canvas);
+        //Log.i("as","draw");
+
     }
 
     public void keyPressed(int key) {
@@ -75,23 +145,63 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchUp(int x, int y, int id) {
-    }
+        /**
+         * x , y
+         * 1. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()
+         * 2. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()/2
+         * 3. controllerBg.getImage().getWidth()/2 , getHeight()
+         * 4. controllerBg.getImage().getWidth() , getHeight()-controllerBg.getImage().getHeight()/2
+         * 5. 0 , getHeight()-controllerBg.getImage().getHeight()/2
+         * 6. 0 , getHeight()-controllerBg.getImage().getHeight()
+         * 7. controllerBg.getImage().getWidth() , getHeight()-controllerBg.getImage().getHeight()
+         * 8. controllerBg.getImage().getWidth() , getHeight()
+         * 9. 0 , getHeight()
+         *
+         *  buton alanı y 7> x 7<
+         *
+         *
+         * sağ üst y 7> 4< x 1> 7<
+         * sağ alt y 4> 8< x 2> 4<
+         * sol üst y 6> 5< x 1<
+         * sol alt y 5> 9< x 1<
+         */
+        if( y >= getHeight()-controllerBg.getImage().getHeight() && x <= controllerBg.getImage().getWidth() ){
+            //buton rect içerisinde bir yere dokunuldu
+            if(x > controllerBg.getImage().getWidth()/2 ){
+                player.walkRight();
+                //sağ bölge
+                if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
+                    //sağ üst
+                    Log.i("CONTROLLER","SAĞ ÜST");
+                }else{
+                    //sağ alt
+                    Log.i("CONTROLLER","SAĞ ALT");
+                }
 
+            }else{
+                player.walkLeft();
+                //sol bölge
+                if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
+                    //sol üst
+                    Log.i("CONTROLLER","SOL ÜST");
+                }else{
+                    Log.i("CONTROLLER","SOL ALT");
+                }
+            }
+        }
+    }
 
     public void pause() {
 
     }
 
-
     public void resume() {
 
     }
 
-
     public void reloadTextures() {
 
     }
-
 
     public void showNotify() {
     }
