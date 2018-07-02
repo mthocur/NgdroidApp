@@ -4,6 +4,11 @@ import android.graphics.Rect;
 
 import com.ngdroidapp.Animation;
 
+import java.lang.reflect.Array;
+
+import istanbul.gamelab.ngdroid.util.Log;
+
+
 public class Player extends GameObject {
 
     private int health;
@@ -12,8 +17,26 @@ public class Player extends GameObject {
     private int stamina;
     private int weapon;
     private int ammo;
-    private boolean moving;
+
     private Animation animation;
+
+    public Physics getPhysics() {
+        return physics;
+    }
+
+    public void setPhysics(Physics physics) {
+        this.physics = physics;
+    }
+
+    private Physics physics;
+
+    private boolean movingRight = false;
+    private boolean movingLeft = false;
+    private boolean jumping = false;
+    private boolean crouching = false;
+
+    private int jumpStartY = 0;
+    private int jumpMaxY = 100;
 
 
     public Player(){}
@@ -25,47 +48,53 @@ public class Player extends GameObject {
     public Player(String tag,Animation animation){
         this.tag = tag;
         this.animation = animation;
+        super.hasCollider = true;
     }
 
     public void stop(){
-        if(moving){
-            moving = false;
-        }
+
+        movingLeft = false;
+        movingRight = false;
+        jumping = false;
+        crouching = false;
 
         this.animation.setSpriteRow(this.animation.getSpriteRowStop());
         this.animation.setPlayStatus(false);
     }
 
     public void walkRight(){
-        if (moving){
-            stop();
+        stop();
+        if(!movingRight){
+            movingRight = true;
+            this.animation.setSpriteRow(this.animation.getSpriteRowRight());
+            this.animation.setPlayStatus(true);
+            this.animation.setSpriteIntervalX(1);
+            //this.animation.setSpriteIntervalY(0);
         }
-        moving = true;
-        this.animation.setSpriteRow(this.animation.getSpriteRowRight());
-        this.animation.setPlayStatus(true);
-        this.animation.setSpriteIntervalX(1);
-        this.animation.setSpriteIntervalY(0);
-        this.animation.setSpriteDestinationX(this.animation.getSpriteDestinationX() + this.animation.getSpriteVelocityX()*this.animation.getSpriteIntervalX());
-        this.animation.setSpriteDestinationX(this.animation.getSpriteDestinationY() + this.animation.getSpriteVelocityY()*this.animation.getSpriteIntervalY());
     }
 
     public void walkLeft(){
-        if (moving){
-            stop();
+        stop();
+
+        if(!movingLeft){
+            Log.i("asdafdsafsgash","1234124");
+            movingLeft = true;
+            this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
+            this.animation.setPlayStatus(true);
+            this.animation.setSpriteIntervalX(-1);
+            //this.animation.setSpriteIntervalY(0);
         }
-        moving = true;
-        this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
-        this.animation.setPlayStatus(true);
-        this.animation.setSpriteIntervalX(-1);
-        this.animation.setSpriteIntervalY(0);
-        this.animation.setSpriteDestinationX(this.animation.getSpriteDestinationX() + this.animation.getSpriteVelocityX()*this.animation.getSpriteIntervalX());
-        this.animation.setSpriteDestinationX(this.animation.getSpriteDestinationY() + this.animation.getSpriteVelocityY()*this.animation.getSpriteIntervalY());
     }
 
     public void jump(){
-        moving = true;
-        this.animation.setSpriteRow(this.animation.getSpriteRowJump());
-        this.animation.setPlayStatus(true);
+        if(!jumping){
+            jumping = true;
+            animation.setPlayStatus(true);
+            animation.setSpriteIntervalY(-1);
+            //animation.setSpriteIntervalX(0);
+            setJumpStartY(animation.getSpriteDestinationY());
+        }
+
     }
 
     public void crouch(){
@@ -73,8 +102,15 @@ public class Player extends GameObject {
         this.animation.setPlayStatus(true);
     }
 
-    public void move(){
+    public void update(){
+        jump();
+    }
 
+    public String getTag(){
+        return super.tag;
+    }
+    public void setTag(String tag){
+        super.tag = tag;
     }
 
     public int getHealth() {
@@ -131,6 +167,54 @@ public class Player extends GameObject {
 
     public void setAnimation(Animation animation) {
         this.animation = animation;
+    }
+
+    public boolean isMovingRight() {
+        return movingRight;
+    }
+
+    public void setMovingRight(boolean movingRight) {
+        this.movingRight = movingRight;
+    }
+
+    public boolean isMovingLeft() {
+        return movingLeft;
+    }
+
+    public void setMovingLeft(boolean movingLeft) {
+        this.movingLeft = movingLeft;
+    }
+
+    public boolean isJumping() {
+        return jumping;
+    }
+
+    public void setJumping(boolean jumping) {
+        this.jumping = jumping;
+    }
+
+    public boolean isCrouching() {
+        return crouching;
+    }
+
+    public void setCrouching(boolean crouching) {
+        this.crouching = crouching;
+    }
+
+    public int getJumpStartY() {
+        return jumpStartY;
+    }
+
+    public void setJumpStartY(int jumpStartY) {
+        this.jumpStartY = jumpStartY;
+    }
+
+    public int getJumpMaxY() {
+        return jumpMaxY;
+    }
+
+    public void setJumpMaxY(int jumpMaxY) {
+        this.jumpMaxY = jumpMaxY;
     }
 
 

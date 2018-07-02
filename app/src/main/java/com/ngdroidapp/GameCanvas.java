@@ -2,12 +2,15 @@ package com.ngdroidapp;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
 import istanbul.gamelab.ngdroid.util.Utils;
 import mthocur.Background;
+import mthocur.Physics;
 import mthocur.Player;
 
 
@@ -23,6 +26,9 @@ public class GameCanvas extends BaseCanvas {
     public Background mainBackground;
     public Background controllerBg;
     public int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
+    private Rect bosluk;
+    private Paint siyah;
+    private Physics physic;
 
     public GameCanvas(NgApp ngApp) {
         super(ngApp);
@@ -42,7 +48,8 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 0,
                 new Rect(),
-                new Rect()
+                new Rect(),
+                false
         );
 
         mainBackground = new Background(
@@ -57,10 +64,13 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 0,
                 new Rect(),
-                new Rect()
+                new Rect(),
+                false
         );
 
         player = new Player();
+        player.setTag("oyuncu");
+        player.setPhysics(physic);
         player.setAnimation(new Animation(
                 Utils.loadImage(root,"cowboy.png"),
                 new Rect(),new Rect(),
@@ -70,24 +80,49 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 256,
                 256,
-                0,
-                0,
+                110,
+                720,
                 animationFrames,
                 256/16,
-                256/16,
+                1,
                 1,
                 0,
                 2
         ));
 
+        bosluk = new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20);
+        siyah = new Paint(Color.BLACK);
+
+        physic = new Physics();
+
     }
 
     public void update() {
+        physic.isColliding(player,bosluk);
+
+        physic.addGravity(player);
+        //player.setGravity(1);
         if(player.getAnimation().getPlayStatus()){
             player.getAnimation().playAnimation(true);
         }else{
             player.getAnimation().playAnimation(false);
         }
+        if(player.isMovingLeft() || player.isMovingRight()){
+            if(player.isJumping()){
+                if(player.getJumpStartY() -  player.getAnimation().getSpriteDestinationY() >= 100){
+                    //player.getAnimation().setPlayStatus(false);
+                    player.getAnimation().setSpriteIntervalY(0);
+                    player.setJumping(false);
+                }
+            }
+        }
+        if(player.isJumping()){
+            if(player.getJumpStartY() -  player.getAnimation().getSpriteDestinationY() >= 100){
+                player.getAnimation().setPlayStatus(false);
+                player.setJumping(false);
+            }
+        }
+
 
 
         //Log.i("----FRAME----",""+player.getAnimation().getCurrentFrame());
@@ -111,6 +146,8 @@ public class GameCanvas extends BaseCanvas {
 
         player.getAnimation().drawToCanvas(canvas);
         //Log.i("as","draw");
+
+        canvas.drawRect(bosluk,siyah);
 
     }
 
@@ -168,23 +205,30 @@ public class GameCanvas extends BaseCanvas {
         if( y >= getHeight()-controllerBg.getImage().getHeight() && x <= controllerBg.getImage().getWidth() ){
             //buton rect içerisinde bir yere dokunuldu
             if(x > controllerBg.getImage().getWidth()/2 ){
-                player.walkRight();
+
                 //sağ bölge
                 if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
                     //sağ üst
                     Log.i("CONTROLLER","SAĞ ÜST");
+                    player.walkRight();
+                    player.jump();
                 }else{
+                    player.stop();
                     //sağ alt
                     Log.i("CONTROLLER","SAĞ ALT");
                 }
 
             }else{
-                player.walkLeft();
+
                 //sol bölge
                 if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
                     //sol üst
+                    player.walkLeft();
+                    player.jump();
                     Log.i("CONTROLLER","SOL ÜST");
                 }else{
+                    player.jump();
+
                     Log.i("CONTROLLER","SOL ALT");
                 }
             }

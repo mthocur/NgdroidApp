@@ -29,7 +29,7 @@ public class Background extends GameObject {
     }
 
     public Background(Bitmap image, boolean sprite, int tileSourceW, int tileSourceH, int tileDestinationW, int tileDestinationH,
-                      int tileSourceX, int tileSourceY, int tileDestinationX, int tileDestinationY, Rect sourceRect,Rect destinationRect
+                      int tileSourceX, int tileSourceY, int tileDestinationX, int tileDestinationY, Rect sourceRect, Rect destinationRect, boolean collider
     ) {
         this.image = image;
         this.sprite = sprite;
@@ -43,6 +43,7 @@ public class Background extends GameObject {
         this.tileDestinationY = tileDestinationY;
         this.sourceRect = sourceRect;
         this.destinationRect  = destinationRect;
+        super.hasCollider = hasCollider;
 
     }
 

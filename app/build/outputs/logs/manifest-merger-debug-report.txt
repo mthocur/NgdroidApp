@@ -48,11 +48,11 @@ ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:15:5-29:1
 activity#com.mycompany.myngdroidapp.GameActivity
 ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:21:9-28:20
 	android:screenOrientation
-		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:13-50
+		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:13-49
 	android:configChanges
-		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:51-86
+		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:50-85
 	android:theme
-		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:87-125
+		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:22:86-124
 	android:name
 		ADDED from C:\gamedev\platform-action\app\src\main\AndroidManifest.xml:21:19-73
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
