@@ -5,16 +5,12 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 
 public abstract class GameObject {
-    protected String tag;
-    protected boolean hasCollider;
+    public String tag;
+    public boolean collider;
 
     public GameObject(){}
 
     public GameObject(String tag){
-        this.tag = tag;
-    }
-
-    public GameObject(String tag, Bitmap image){
         this.tag = tag;
     }
 

@@ -10,6 +10,7 @@ import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
 import istanbul.gamelab.ngdroid.util.Utils;
 import mthocur.Background;
+import mthocur.Ground;
 import mthocur.Physics;
 import mthocur.Player;
 
@@ -26,7 +27,7 @@ public class GameCanvas extends BaseCanvas {
     public Background mainBackground;
     public Background controllerBg;
     public int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
-    private Rect bosluk;
+    private Ground olumcizgisi;
     private Paint siyah;
     private Physics physic;
 
@@ -35,6 +36,7 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void setup() {
+
 
         controllerBg = new Background(
                 Utils.loadImage(root,"controller.png"),
@@ -80,49 +82,37 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 256,
                 256,
-                110,
-                720,
-                animationFrames,
-                256/16,
-                1,
-                1,
                 0,
+                0,
+                animationFrames,
                 2
         ));
 
-        bosluk = new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20);
-        siyah = new Paint(Color.BLACK);
+        player.getAnimation().setPlayStatus(false);
 
+
+
+        olumcizgisi = new Ground();
+        olumcizgisi.setRect(new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20));
+        siyah = new Paint(Color.BLACK);
         physic = new Physics();
 
     }
 
     public void update() {
-        physic.isColliding(player,bosluk);
-
+        //physic.isColliding(player,bosluk);
+        physic.checkCollision(player,olumcizgisi);
         physic.addGravity(player);
-        //player.setGravity(1);
+
         if(player.getAnimation().getPlayStatus()){
             player.getAnimation().playAnimation(true);
         }else{
             player.getAnimation().playAnimation(false);
         }
-        if(player.isMovingLeft() || player.isMovingRight()){
-            if(player.isJumping()){
-                if(player.getJumpStartY() -  player.getAnimation().getSpriteDestinationY() >= 100){
-                    //player.getAnimation().setPlayStatus(false);
-                    player.getAnimation().setSpriteIntervalY(0);
-                    player.setJumping(false);
-                }
-            }
-        }
-        if(player.isJumping()){
-            if(player.getJumpStartY() -  player.getAnimation().getSpriteDestinationY() >= 100){
-                player.getAnimation().setPlayStatus(false);
-                player.setJumping(false);
-            }
-        }
 
+        player.updateJump();
+
+        player.updateLocation();
 
 
         //Log.i("----FRAME----",""+player.getAnimation().getCurrentFrame());
@@ -147,7 +137,7 @@ public class GameCanvas extends BaseCanvas {
         player.getAnimation().drawToCanvas(canvas);
         //Log.i("as","draw");
 
-        canvas.drawRect(bosluk,siyah);
+        canvas.drawRect(olumcizgisi.getRect(),siyah);
 
     }
 
@@ -176,12 +166,6 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchDown(int x, int y, int id) {
-    }
-
-    public void touchMove(int x, int y, int id) {
-    }
-
-    public void touchUp(int x, int y, int id) {
         /**
          * x , y
          * 1. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()
@@ -211,7 +195,7 @@ public class GameCanvas extends BaseCanvas {
                     //sağ üst
                     Log.i("CONTROLLER","SAĞ ÜST");
                     player.walkRight();
-                    player.jump();
+                    //player.jump();
                 }else{
                     player.stop();
                     //sağ alt
@@ -233,6 +217,13 @@ public class GameCanvas extends BaseCanvas {
                 }
             }
         }
+    }
+
+    public void touchMove(int x, int y, int id) {
+    }
+
+    public void touchUp(int x, int y, int id) {
+        player.getAnimation().setPlayStatus(false);
     }
 
     public void pause() {

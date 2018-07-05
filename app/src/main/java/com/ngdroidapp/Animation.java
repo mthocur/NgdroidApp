@@ -28,10 +28,6 @@ public class Animation{
      * @param spriteDestinationX int sprite destination X value
      * @param spriteDestinationY int sprite destination Y value
      * @param animationFrames int[][] sprite animation frame limits eg. {{0,0},{1,8},{9,11},{11,13}}
-     * @param spriteVelocityX int animation velocity x value
-     * @param spriteVelocityY int animation velocity y value
-     * @param spriteIntervalX int animation interval x value
-     * @param spriteIntervalX int animation interval y value
      * @param spriteRow int row of the animation on y axis
      */
     public Animation(Bitmap sprite,
@@ -46,10 +42,6 @@ public class Animation{
                      int spriteDestinationX,
                      int spriteDestinationY,
                      int[][] animationFrames,
-                     int spriteVelocityX,
-                     int spriteVelocityY,
-                     int spriteIntervalX,
-                     int spriteIntervalY,
                      int spriteRow ){
         this.spriteSheet = sprite;
         this.spriteDestination = spriteDestination;
@@ -63,10 +55,6 @@ public class Animation{
         this.spriteDestinationX = spriteDestinationX;
         this.spriteDestinationY = spriteDestinationY;
         this.animationFrames = animationFrames;
-        this.spriteVelocityX = spriteVelocityX;
-        this.spriteVelocityY = spriteVelocityY;
-        this.spriteIntervalX = spriteIntervalX;
-        this.spriteIntervalY = spriteIntervalY;
         this.spriteRow = spriteRow;
         Log.i("ANIMATION","An animation object has been created with all parameters given");
     }
@@ -92,10 +80,6 @@ public class Animation{
                 spriteDestinationX,
                 spriteDestinationY,
                 animationFrames,
-                spriteVelocityX,
-                spriteVelocityY,
-                spriteIntervalX,
-                spriteIntervalY,
                 spriteRow
         );
     }
@@ -115,10 +99,7 @@ public class Animation{
 
     //animasyon yönleri için başlangıç ve bitiş frame numaraları
     private int[][] animationFrames = {{0,0}};
-    private int spriteVelocityX = spriteDestinationW / 8;
-    private int spriteVelocityY = spriteDestinationH / 8;
-    private int spriteIntervalX =1;
-    private int spriteIntervalY =0;
+
 
     //sprite row for current animation eg. 0.row = stop, 1.row = walk right
     private int spriteRow = 0;
@@ -164,8 +145,8 @@ public class Animation{
         spriteSourceX = currentFrame * spriteSourceW;
         spriteSourceY = spriteRow * spriteSourceH;
 
-        spriteDestinationX += spriteVelocityX * spriteIntervalX;
-        spriteDestinationY += spriteVelocityX * spriteIntervalY;
+        //spriteDestinationX += spriteVelocityX * spriteIntervalX;
+        //spriteDestinationY += spriteVelocityX * spriteIntervalY;
 
     }
 
@@ -193,6 +174,7 @@ public class Animation{
     public boolean getPlayStatus(){
         return this.playStatus;
     }
+
     public void setPlayStatus(boolean state){
         this.playStatus = state;
     }
@@ -299,38 +281,6 @@ public class Animation{
 
     public void setAnimationFrames(int[][] animationFrames) {
         this.animationFrames = animationFrames;
-    }
-
-    public int getSpriteVelocityX() {
-        return spriteVelocityX;
-    }
-
-    public void setSpriteVelocityX(int spriteVelocityX) {
-        this.spriteVelocityX = spriteVelocityX;
-    }
-
-    public int getSpriteVelocityY() {
-        return spriteVelocityY;
-    }
-
-    public void setSpriteVelocityY(int spriteVelocityY) {
-        this.spriteVelocityY = spriteVelocityY;
-    }
-
-    public int getSpriteIntervalX() {
-        return spriteIntervalX;
-    }
-
-    public void setSpriteIntervalX(int spriteIntervalX) {
-        this.spriteIntervalX = spriteIntervalX;
-    }
-
-    public int getSpriteIntervalY() {
-        return spriteIntervalY;
-    }
-
-    public void setSpriteIntervalY(int spriteIntervalY) {
-        this.spriteIntervalY = spriteIntervalY;
     }
 
     public int getSpriteRowStop() {

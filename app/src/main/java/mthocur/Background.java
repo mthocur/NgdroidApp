@@ -43,7 +43,7 @@ public class Background extends GameObject {
         this.tileDestinationY = tileDestinationY;
         this.sourceRect = sourceRect;
         this.destinationRect  = destinationRect;
-        super.hasCollider = hasCollider;
+        super.collider = collider;
 
     }
 

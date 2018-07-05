@@ -1,5 +1,6 @@
 package mthocur;
 
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import com.ngdroidapp.Animation;
@@ -19,14 +20,8 @@ public class Player extends GameObject {
     private int ammo;
 
     private Animation animation;
+    private boolean collider = true;
 
-    public Physics getPhysics() {
-        return physics;
-    }
-
-    public void setPhysics(Physics physics) {
-        this.physics = physics;
-    }
 
     private Physics physics;
 
@@ -34,9 +29,22 @@ public class Player extends GameObject {
     private boolean movingLeft = false;
     private boolean jumping = false;
     private boolean crouching = false;
+    private boolean stop = true;
+
+
+    private boolean onGround = false;
+    private boolean falling = false;
 
     private int jumpStartY = 0;
     private int jumpMaxY = 100;
+
+    private int velocityX;
+    private int velocityY;
+    private int intervalX = 1;
+    private int intervalY = 0;
+
+
+
 
 
     public Player(){}
@@ -48,8 +56,17 @@ public class Player extends GameObject {
     public Player(String tag,Animation animation){
         this.tag = tag;
         this.animation = animation;
-        super.hasCollider = true;
+        super.collider = true;
     }
+    public void updateLocation(){
+        velocityX = animation.getSpriteDestinationW()/8;
+        velocityY = animation.getSpriteDestinationH()/8;
+        if(!stop &&movingLeft || movingRight|| jumping || crouching){
+            animation.setSpriteDestinationX( animation.getSpriteDestinationX() + velocityX * intervalX );
+            animation.setSpriteDestinationY( animation.getSpriteDestinationY() + velocityY * intervalY );
+        }
+    }
+
 
     public void stop(){
 
@@ -57,42 +74,74 @@ public class Player extends GameObject {
         movingRight = false;
         jumping = false;
         crouching = false;
+        stop = true;
 
         this.animation.setSpriteRow(this.animation.getSpriteRowStop());
         this.animation.setPlayStatus(false);
     }
 
     public void walkRight(){
-        stop();
-        if(!movingRight){
-            movingRight = true;
-            this.animation.setSpriteRow(this.animation.getSpriteRowRight());
-            this.animation.setPlayStatus(true);
-            this.animation.setSpriteIntervalX(1);
-            //this.animation.setSpriteIntervalY(0);
+        if(isOnGround()){
+            stop = false;
+            if(!movingRight){
+                movingRight = true;
+                this.animation.setSpriteRow(this.animation.getSpriteRowRight());
+                this.animation.setPlayStatus(true);
+                intervalX = 1;
+            }
         }
+
     }
 
     public void walkLeft(){
-        stop();
-
-        if(!movingLeft){
-            Log.i("asdafdsafsgash","1234124");
-            movingLeft = true;
-            this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
-            this.animation.setPlayStatus(true);
-            this.animation.setSpriteIntervalX(-1);
-            //this.animation.setSpriteIntervalY(0);
+        if(isOnGround()){
+            stop = false;
+            if(!movingLeft){
+                movingLeft = true;
+                this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
+                this.animation.setPlayStatus(true);
+                intervalX = -1;
+            }
         }
     }
 
     public void jump(){
+        stop = false;
         if(!jumping){
             jumping = true;
             animation.setPlayStatus(true);
-            animation.setSpriteIntervalY(-1);
+            intervalY = -1;
+            if(!movingRight || !movingLeft){
+                intervalX = 0;
+            }
             //animation.setSpriteIntervalX(0);
             setJumpStartY(animation.getSpriteDestinationY());
+        }
+
+    }
+
+    public void updateJump(){
+        if(isMovingLeft() || isMovingRight()){
+            if(isJumping()){
+                if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 100){
+                    //player.getAnimation().setPlayStatus(false);
+                    intervalY = 0;
+                    setJumping(false);
+                }
+                setFalling(true);
+                setOnGround(false);
+                getAnimation().setPlayStatus(false);
+            }
+        }
+        if(isJumping()){
+            if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 100){
+                getAnimation().setPlayStatus(false);
+                intervalY = 0;
+                setJumping(false);
+            }
+            setFalling(true);
+            setOnGround(false);
+
         }
 
     }
@@ -104,6 +153,23 @@ public class Player extends GameObject {
 
     public void update(){
         jump();
+    }
+
+
+    public boolean isOnGround() {
+        return onGround;
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
+    }
+
+    public boolean isFalling() {
+        return falling;
+    }
+
+    public void setFalling(boolean falling) {
+        this.falling = falling;
     }
 
     public String getTag(){
@@ -217,6 +283,15 @@ public class Player extends GameObject {
         this.jumpMaxY = jumpMaxY;
     }
 
+    public boolean getCollider() { return collider; }
+
+    public void setCollider(boolean collider) { this.collider = collider; }
+
+    public Physics getPhysics() {
+        return physics;
+    }
+
+    public void setPhysics(Physics physics) { this.physics = physics; }
 
 
 }

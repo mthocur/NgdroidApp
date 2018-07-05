@@ -28,7 +28,7 @@
         <activity
             android:name="com.mycompany.myngdroidapp.GameActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
