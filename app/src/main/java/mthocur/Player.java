@@ -41,6 +41,8 @@ public class Player extends GameObject {
     private int jumpStartY = 0;
     private int jumpMaxY = 100;
 
+
+
     private int velocityX;
     private int velocityY;
     private int intervalX = 1;
@@ -334,6 +336,38 @@ public class Player extends GameObject {
 
     public void setCanMoveLeft(boolean canMoveLeft) {
         this.canMoveLeft = canMoveLeft;
+    }
+
+    public int getVelocityX() {
+        return velocityX;
+    }
+
+    public void setVelocityX(int velocityX) {
+        this.velocityX = velocityX;
+    }
+
+    public int getVelocityY() {
+        return velocityY;
+    }
+
+    public void setVelocityY(int velocityY) {
+        this.velocityY = velocityY;
+    }
+
+    public int getIntervalX() {
+        return intervalX;
+    }
+
+    public void setIntervalX(int intervalX) {
+        this.intervalX = intervalX;
+    }
+
+    public int getIntervalY() {
+        return intervalY;
+    }
+
+    public void setIntervalY(int intervalY) {
+        this.intervalY = intervalY;
     }
 
 

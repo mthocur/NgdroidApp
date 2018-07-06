@@ -1,4 +1,4 @@
-#Fri Jul 06 13:34:04 EET 2018
+#Fri Jul 06 14:40:46 EET 2018
 base.0=C\:\\gamedev\\platform-action\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main
 renamed.0=classes.dex
 file.0=C\:\\gamedev\\platform-action\\app\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\1f\\main\\classes.dex

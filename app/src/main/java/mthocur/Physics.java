@@ -50,14 +50,14 @@ public class Physics {
                                         if( ((Player) obj ).getAnimation().getSpriteDestination().top > ((Ground) obj2).getRect().top ){
                                             //Log.e("Physics","oyuncu aşağıda");
                                         }else{
-                                            //Log.e("Physics","oyuncu üstte");
+                                            Log.e("Physics","oyuncu üstte");
                                             ((Player) obj).setOnGround(true);
                                             ((Player) obj).setFalling(false);
                                             ((Player) obj ).setCanMoveRight(true);
                                             ((Player) obj ).setCanMoveLeft(true);
+
                                         }
                                     }
-
                                     if(Collision.checkHorizontalCollision( ((Player) obj ).getAnimation().getSpriteDestination() , ((Ground) obj2).getRect() )){
                                         //yatay çarpışma
                                         //Log.e("Physics","yatay çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
@@ -68,15 +68,14 @@ public class Physics {
                                             ((Player) obj ).setCanMoveRight(false);
                                             ((Player) obj ).setCanMoveLeft(true);
                                             ((Player) obj ).setFalling(true);
-                                            continue;
+
 
                                         }else{
-                                            //Log.e("Physics","oyuncu sağda");
-                                            ((Player) obj ).stop();
+                                            Log.e("Physics","oyuncu sağda");
+                                            //((Player) obj ).stop();
                                             ((Player) obj ).setCanMoveRight(true);
                                             ((Player) obj ).setCanMoveLeft(false);
                                             ((Player) obj ).setFalling(true);
-                                            continue;
                                         }
                                     }
 

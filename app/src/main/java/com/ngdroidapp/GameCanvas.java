@@ -112,8 +112,8 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 256,
                 256,
-                0,
-                0,
+                100,
+                100,
                 animationFrames,
                 2
         ));
