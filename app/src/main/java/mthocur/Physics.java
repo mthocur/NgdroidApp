@@ -21,12 +21,13 @@ public class Physics {
 
     public void addGravity(Player player){
 
-        if(!player.isOnGround()){
+        if(!player.isOnGround() && !player.isJumping()){
             player.getAnimation().setPlayStatus(true);
             player.getAnimation().setSpriteDestinationY(player.getAnimation().getSpriteDestinationY()+GRAVITY);
         }
 
     }
+
 
     public void checkCollision(Object... objects){
         for (Object obj : objects) {
@@ -37,11 +38,62 @@ public class Physics {
                             if(obj2.getClass() == Player.class){
                                 //Oyuncular çarpıştı
                             }else if(obj2.getClass() == Ground.class){
+                                //Log.i("1","oyuncu x "+obj2.getClass());
+                                //çarpışma var mı?
                                 if(((Player) obj ).getAnimation().getSpriteDestination().intersect( ((Ground) obj2).getRect() )){
+                                    //çarğışma dikey mi yatay mı?
+
+                                    if(Collision.checkVerticalCollision( ((Player) obj ).getAnimation().getSpriteDestination() , ((Ground) obj2).getRect() )){
+                                        //yatay çarpışma
+                                        //Log.e("Physics","dikey çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
+                                        //oyuncu nesnenin üstünde mi altında mı? düşmeli mi? yürüyebilmeli mi?
+                                        if( ((Player) obj ).getAnimation().getSpriteDestination().top > ((Ground) obj2).getRect().top ){
+                                            //Log.e("Physics","oyuncu aşağıda");
+                                        }else{
+                                            //Log.e("Physics","oyuncu üstte");
+                                            ((Player) obj).setOnGround(true);
+                                            ((Player) obj).setFalling(false);
+                                            ((Player) obj ).setCanMoveRight(true);
+                                            ((Player) obj ).setCanMoveLeft(true);
+                                        }
+                                    }
+
+                                    if(Collision.checkHorizontalCollision( ((Player) obj ).getAnimation().getSpriteDestination() , ((Ground) obj2).getRect() )){
+                                        //yatay çarpışma
+                                        //Log.e("Physics","yatay çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
+                                        //oyuncu nesnenin sağında mı solunda mı? sağa mı sola mı gidememeli?
+                                        if( ((Player) obj ).getAnimation().getSpriteDestination().left > ((Ground) obj2).getRect().left ){
+                                            Log.e("Physics","oyuncu solda");
+                                            //((Player) obj ).stop();
+                                            ((Player) obj ).setCanMoveRight(false);
+                                            ((Player) obj ).setCanMoveLeft(true);
+                                            ((Player) obj ).setFalling(true);
+                                            continue;
+
+                                        }else{
+                                            //Log.e("Physics","oyuncu sağda");
+                                            ((Player) obj ).stop();
+                                            ((Player) obj ).setCanMoveRight(true);
+                                            ((Player) obj ).setCanMoveLeft(false);
+                                            ((Player) obj ).setFalling(true);
+                                            continue;
+                                        }
+                                    }
+
+                                }
+                                /*
+                                if(((Player) obj ).getAnimation().getSpriteDestination().intersect( ((Ground) obj2).getRect() )){
+                                    //Log.i("2","oyuncu x "+obj2.getClass());
                                     ((Player) obj).setOnGround(true);
                                     ((Player) obj).setFalling(false);
-                                    Log.i("Collision",""+((Player) obj).getTag()+" Taglı oyuncu");
-                                }
+                                    /*if(((Player) obj).isMovingRight()){
+                                        ((Player) obj).stop();
+                                    }
+                                    if(((Player) obj).isMovingLeft()){
+                                        ((Player) obj).stop();
+                                    }
+                                    Log.i("Collision",""+((Player) obj).getTag()+" & "+((Ground) obj2).getTag());
+                                }*/
 
                             }else if(obj2.getClass() == Bullet.class){
                                 //oyuncu ile mermi çarpıştı
@@ -61,6 +113,10 @@ public class Physics {
 
         }
 
+    }
+
+    public boolean playerCanMoveRight(){
+        return true;
     }
 
 

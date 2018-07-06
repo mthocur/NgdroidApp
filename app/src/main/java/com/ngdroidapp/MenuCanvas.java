@@ -18,6 +18,7 @@ public class MenuCanvas extends BaseCanvas {
     }
 
     public void setup() {
+
     }
 
     public void update() {

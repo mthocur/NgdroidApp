@@ -3,6 +3,7 @@ package mthocur;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.RectF;
 
 import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
@@ -35,8 +36,8 @@ public class Background extends GameObject {
         this.sprite = sprite;
         this.tileSourceW = tileSourceW;
         this.tileSourceH = tileSourceH;
-        this.tileDestinationH = tileDestinationH;
         this.tileDestinationW = tileDestinationW;
+        this.tileDestinationH = tileDestinationH;
         this.tileSourceX = tileSourceX;
         this.tileSourceY = tileSourceY;
         this.tileDestinationX = tileDestinationX;
@@ -65,12 +66,16 @@ public class Background extends GameObject {
 
     }
 
-    public void drawBackgroundTo(Canvas canvas, int width, int height,int destinationLeft, int destinationTop, int destinationRight, int destinationBottom) {
+    public void drawBackgroundTo(Canvas canvas, int width, int height, int left, int top) {
 
-        sourceRect.set(tileSourceX, tileSourceY, tileSourceX + tileSourceW, tileSourceY + tileSourceH);
-        destinationRect.set(destinationLeft, destinationTop, destinationRight, destinationBottom);
-        canvas.drawBitmap(image, sourceRect, destinationRect, null);
+        canvas.drawBitmap(image, left,top,null);
 
+    }
+
+    public void drawBackgroundTo(boolean resize, Canvas canvas, int left, int top, int right, int bottom) {
+
+        destinationRect.set(left, top, right, bottom);
+        canvas.drawBitmap(image, new Rect(0,0,tileDestinationW,tileDestinationH), destinationRect,null);
 
     }
 

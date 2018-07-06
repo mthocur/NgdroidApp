@@ -14,4 +14,19 @@ public abstract class GameObject {
         this.tag = tag;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public boolean isCollider() {
+        return collider;
+    }
+
+    public void setCollider(boolean collider) {
+        this.collider = collider;
+    }
 }

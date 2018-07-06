@@ -6,6 +6,34 @@ import android.graphics.Rect;
 
 public class Collision {
 
+
+
+    public static boolean checkVerticalCollision(Rect r, Rect r2){
+        //dikey çarpışma testi
+
+        if(r.left < r2.right && r2.left < r.right){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkHorizontalCollision(Rect r, Rect r2){
+        //yatay çarpışma
+        if(r.top < r2.bottom && r2.top < r.bottom){
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean checkCollision(Rect r, Rect r2){
+        if(r.left < r2.right && r2.left < r.right && r.top < r2.bottom && r2.top < r.bottom){
+            return true;
+        }
+        return false;
+    }
+
+
+
     /**
      * @param bitmap1 First bitmap
      * @param x1 x-position of bitmap1 on screen.

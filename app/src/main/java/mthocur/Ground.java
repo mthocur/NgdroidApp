@@ -17,4 +17,6 @@ public class Ground extends GameObject {
         this.rect = rect;
     }
 
+
+
 }

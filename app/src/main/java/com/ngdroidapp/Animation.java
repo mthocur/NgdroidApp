@@ -137,7 +137,6 @@ public class Animation{
      * Use in draw() function
      */
     public void resumeAnimation(){
-        playStatus = true;
         currentFrame++;
         if(currentFrame > animationFrames[1][1]) {
             currentFrame = animationFrames[1][0];

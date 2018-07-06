@@ -25,11 +25,18 @@ public class GameCanvas extends BaseCanvas {
 
     public Player player;
     public Background mainBackground;
+    public Background jumpButton;
     public Background controllerBg;
     public int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
     private Ground olumcizgisi;
+    private Ground olumcizgisisol;
+    private Ground olumcizgisisag;
     private Paint siyah;
     private Physics physic;
+    private Bitmap tempImage;
+
+    private int touchDownPosX;
+    private int touchDownPosY;
 
     public GameCanvas(NgApp ngApp) {
         super(ngApp);
@@ -37,14 +44,14 @@ public class GameCanvas extends BaseCanvas {
 
     public void setup() {
 
-
+        tempImage = Utils.loadImage(root,"controller.png");
         controllerBg = new Background(
-                Utils.loadImage(root,"controller.png"),
+                tempImage,
                 false,
-                Utils.loadImage(root,"controller.png").getWidth(),
-                Utils.loadImage(root,"controller.png").getHeight(),
-                128,
-                128,
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                tempImage.getWidth(),
+                tempImage.getHeight(),
                 0,
                 0,
                 0,
@@ -54,11 +61,32 @@ public class GameCanvas extends BaseCanvas {
                 false
         );
 
-        mainBackground = new Background(
-                Utils.loadImage(root,"ingame.png"),
+
+        tempImage = Utils.loadImage(root,"jump.png");
+
+        jumpButton = new Background(
+                tempImage,
                 false,
-                Utils.loadImage(root,"ingame.png").getWidth(),
-                Utils.loadImage(root,"ingame.png").getHeight(),
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                0,
+                0,
+                0,
+                0,
+                new Rect(),
+                new Rect(),
+                false
+        );
+
+        tempImage = Utils.loadImage(root,"ingame.png");
+
+        mainBackground = new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),
+                tempImage.getHeight(),
                 getWidth(),
                 getHeight(),
                 0,
@@ -70,11 +98,13 @@ public class GameCanvas extends BaseCanvas {
                 false
         );
 
+
         player = new Player();
         player.setTag("oyuncu");
         player.setPhysics(physic);
+        tempImage = Utils.loadImage(root,"cowboy.png");
         player.setAnimation(new Animation(
-                Utils.loadImage(root,"cowboy.png"),
+                tempImage,
                 new Rect(),new Rect(),
                 128,
                 128,
@@ -93,15 +123,27 @@ public class GameCanvas extends BaseCanvas {
 
 
         olumcizgisi = new Ground();
+        olumcizgisi.setTag("olumcizgisi");
         olumcizgisi.setRect(new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20));
+
+        olumcizgisisol = new Ground();
+        olumcizgisisol.setTag("olumcizgisisol");
+        olumcizgisisol.setRect(new Rect(5,5,10,getHeight()-5));
+
+        olumcizgisisag = new Ground();
+        olumcizgisisag.setTag("olumcizgisisag");
+        olumcizgisisag.setRect(new Rect(getWidth()-10,5,getWidth()-5,getHeight()-5));
+
         siyah = new Paint(Color.BLACK);
         physic = new Physics();
+
+
 
     }
 
     public void update() {
-        //physic.isColliding(player,bosluk);
-        physic.checkCollision(player,olumcizgisi);
+
+        physic.checkCollision(player,olumcizgisi,olumcizgisisag,olumcizgisisol);
         physic.addGravity(player);
 
         if(player.getAnimation().getPlayStatus()){
@@ -113,31 +155,39 @@ public class GameCanvas extends BaseCanvas {
         player.updateJump();
 
         player.updateLocation();
-
+        player.updateMovingStatus();
+        //Log.e("SONRA",""+player.getAnimation().getPlayStatus());
 
         //Log.i("----FRAME----",""+player.getAnimation().getCurrentFrame());
-
+        Log.e("ONCE",""+player.getAnimation().getPlayStatus()+"//"+player.isOnGround()+"//"+player.canMoveLeft());
 
     }
 
     public void draw(Canvas canvas) {
 
         mainBackground.drawBackground(canvas,getWidth(),getHeight());
-
         controllerBg.drawBackgroundTo(
                 canvas,
                 getWidth(),
                 getHeight(),
                 0,
-                getHeight()-controllerBg.getImage().getHeight(),
-                controllerBg.getImage().getHeight(),
-                getHeight()
+                getHeight()-controllerBg.getImage().getHeight()
+        );
+
+        jumpButton.drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                getWidth()-jumpButton.getImage().getWidth(),
+                getHeight()-jumpButton.getImage().getHeight()
         );
 
         player.getAnimation().drawToCanvas(canvas);
         //Log.i("as","draw");
 
         canvas.drawRect(olumcizgisi.getRect(),siyah);
+        canvas.drawRect(olumcizgisisol.getRect(),siyah);
+        canvas.drawRect(olumcizgisisag.getRect(),siyah);
 
     }
 
@@ -166,6 +216,8 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchDown(int x, int y, int id) {
+        touchDownPosX = x;
+        touchDownPosY = y;
         /**
          * x , y
          * 1. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()
@@ -189,37 +241,26 @@ public class GameCanvas extends BaseCanvas {
         if( y >= getHeight()-controllerBg.getImage().getHeight() && x <= controllerBg.getImage().getWidth() ){
             //buton rect içerisinde bir yere dokunuldu
             if(x > controllerBg.getImage().getWidth()/2 ){
-
-                //sağ bölge
-                if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
-                    //sağ üst
-                    Log.i("CONTROLLER","SAĞ ÜST");
-                    player.walkRight();
-                    //player.jump();
-                }else{
-                    player.stop();
-                    //sağ alt
-                    Log.i("CONTROLLER","SAĞ ALT");
-                }
+                player.walkRight();
+                Log.e("TD","SAĞ YÜRÜ");
 
             }else{
+                player.walkLeft();
+                Log.e("TD","SOL YÜRÜ");
 
-                //sol bölge
-                if(y < getHeight()-controllerBg.getImage().getHeight()/2 ){
-                    //sol üst
-                    player.walkLeft();
-                    player.jump();
-                    Log.i("CONTROLLER","SOL ÜST");
-                }else{
-                    player.jump();
-
-                    Log.i("CONTROLLER","SOL ALT");
-                }
             }
+        }
+
+        if( y >= getHeight()-jumpButton.getImage().getHeight() && x >= getWidth()-jumpButton.getImage().getWidth() ){
+            //buton rect içerisinde bir yere dokunuldu
+            //jumpbuton koordinatları içerisinde bir yere dokunuldu
+            player.jump();
         }
     }
 
     public void touchMove(int x, int y, int id) {
+
+
     }
 
     public void touchUp(int x, int y, int id) {

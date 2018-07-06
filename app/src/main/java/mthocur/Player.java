@@ -24,6 +24,9 @@ public class Player extends GameObject {
 
 
     private Physics physics;
+    private boolean canMoveRight = true;
+    private boolean canMoveLeft = true;
+
 
     private boolean movingRight = false;
     private boolean movingLeft = false;
@@ -58,18 +61,17 @@ public class Player extends GameObject {
         this.animation = animation;
         super.collider = true;
     }
-    public void updateLocation(){
-        velocityX = animation.getSpriteDestinationW()/8;
-        velocityY = animation.getSpriteDestinationH()/8;
-        if(!stop &&movingLeft || movingRight|| jumping || crouching){
-            animation.setSpriteDestinationX( animation.getSpriteDestinationX() + velocityX * intervalX );
-            animation.setSpriteDestinationY( animation.getSpriteDestinationY() + velocityY * intervalY );
-        }
+
+
+    public boolean isStop() {
+        return stop;
     }
 
+    public void setStop(boolean stop) {
+        this.stop = stop;
+    }
 
     public void stop(){
-
         movingLeft = false;
         movingRight = false;
         jumping = false;
@@ -80,28 +82,34 @@ public class Player extends GameObject {
         this.animation.setPlayStatus(false);
     }
 
-    public void walkRight(){
-        if(isOnGround()){
-            stop = false;
-            if(!movingRight){
-                movingRight = true;
-                this.animation.setSpriteRow(this.animation.getSpriteRowRight());
-                this.animation.setPlayStatus(true);
-                intervalX = 1;
-            }
-        }
 
+    public void walkRight(){
+        //Log.e("WR","SAĞ YÜRÜ:"+isOnGround());
+
+        if(isOnGround() && canMoveRight){
+            stop = false;
+            //Log.e("WR","movingright:"+movingRight);
+
+            movingRight = true;
+            movingLeft = false;
+            this.animation.setSpriteRow(this.animation.getSpriteRowRight());
+            this.animation.setPlayStatus(true);
+            intervalX = 1;
+
+        }
     }
 
     public void walkLeft(){
-        if(isOnGround()){
+        //Log.e("WL","SOL YÜRÜ:"+isOnGround());
+        if(isOnGround() && canMoveLeft){
             stop = false;
-            if(!movingLeft){
-                movingLeft = true;
-                this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
-                this.animation.setPlayStatus(true);
-                intervalX = -1;
-            }
+            //Log.e("WL","movingLeft:"+movingLeft);
+            movingLeft = true;
+            movingRight = false;
+            this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
+            this.animation.setPlayStatus(true);
+            intervalX = -1;
+
         }
     }
 
@@ -121,6 +129,7 @@ public class Player extends GameObject {
     }
 
     public void updateJump(){
+
         if(isMovingLeft() || isMovingRight()){
             if(isJumping()){
                 if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 100){
@@ -143,7 +152,25 @@ public class Player extends GameObject {
             setOnGround(false);
 
         }
+        if(!isJumping() && isOnGround() && (isMovingLeft() || isMovingRight())){
+            getAnimation().setPlayStatus(true);
+        }
 
+    }
+
+    public void updateMovingStatus(){
+        if(isMovingRight()||isMovingLeft()){
+            animation.setPlayStatus(true);
+        }
+    }
+
+    public void updateLocation(){
+        velocityX = animation.getSpriteDestinationW()/8;
+        velocityY = animation.getSpriteDestinationH()/8;
+        if(!stop &&(movingLeft || movingRight|| jumping || crouching)){
+            animation.setSpriteDestinationX( animation.getSpriteDestinationX() + velocityX * intervalX );
+            animation.setSpriteDestinationY( animation.getSpriteDestinationY() + velocityY * intervalY );
+        }
     }
 
     public void crouch(){
@@ -292,6 +319,22 @@ public class Player extends GameObject {
     }
 
     public void setPhysics(Physics physics) { this.physics = physics; }
+
+    public boolean canMoveRight() {
+        return canMoveRight;
+    }
+
+    public void setCanMoveRight(boolean canMoveRight) {
+        this.canMoveRight = canMoveRight;
+    }
+
+    public boolean canMoveLeft() {
+        return canMoveLeft;
+    }
+
+    public void setCanMoveLeft(boolean canMoveLeft) {
+        this.canMoveLeft = canMoveLeft;
+    }
 
 
 }
