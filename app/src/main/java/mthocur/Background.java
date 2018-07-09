@@ -79,6 +79,15 @@ public class Background extends GameObject {
 
     }
 
+    public void drawBackgroundTo(Canvas canvas, int width, int height,int destinationLeft, int destinationTop, int destinationRight, int destinationBottom) {
+
+        sourceRect.set(tileSourceX, tileSourceY, tileSourceX + tileSourceW, tileSourceY + tileSourceH);
+        destinationRect.set(destinationLeft, destinationTop, destinationLeft + destinationRight, destinationTop + destinationBottom);
+        canvas.drawBitmap(image, sourceRect, destinationRect, null);
+
+
+    }
+
     public Bitmap getImage() {
         return image;
     }

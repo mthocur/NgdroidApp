@@ -48,10 +48,6 @@ public class Player extends GameObject {
     private int intervalX = 1;
     private int intervalY = 0;
 
-
-
-
-
     public Player(){}
 
     public Player(String tag){
@@ -86,32 +82,27 @@ public class Player extends GameObject {
 
 
     public void walkRight(){
-        //Log.e("WR","SAĞ YÜRÜ:"+isOnGround());
 
         if(isOnGround() && canMoveRight){
             stop = false;
-            //Log.e("WR","movingright:"+movingRight);
-
-            movingRight = true;
             movingLeft = false;
+            movingRight = true;
             this.animation.setSpriteRow(this.animation.getSpriteRowRight());
             this.animation.setPlayStatus(true);
             intervalX = 1;
-
         }
+
+
     }
 
     public void walkLeft(){
-        //Log.e("WL","SOL YÜRÜ:"+isOnGround());
         if(isOnGround() && canMoveLeft){
             stop = false;
-            //Log.e("WL","movingLeft:"+movingLeft);
-            movingLeft = true;
             movingRight = false;
+            movingLeft = true;
             this.animation.setSpriteRow(this.animation.getSpriteRowLeft());
             this.animation.setPlayStatus(true);
             intervalX = -1;
-
         }
     }
 
@@ -166,7 +157,16 @@ public class Player extends GameObject {
         }
     }
 
-    public void updateLocation(){
+    public void updateLocation(int width){
+        if( animation.getSpriteDestinationX()/2  <= 0){
+            canMoveLeft = false;
+            animation.setSpriteDestinationX( animation.getSpriteDestinationW()/8-2 );
+        }
+        if( animation.getSpriteDestinationX() >=  width){
+            canMoveRight = false;
+            animation.setSpriteDestinationX( width-animation.getSpriteDestinationW() );
+        }
+
         velocityX = animation.getSpriteDestinationW()/8;
         velocityY = animation.getSpriteDestinationH()/8;
         if(!stop &&(movingLeft || movingRight|| jumping || crouching)){

@@ -31,6 +31,13 @@ public class GameCanvas extends BaseCanvas {
     private Ground olumcizgisi;
     private Ground olumcizgisisol;
     private Ground olumcizgisisag;
+
+    public Ground ground1;
+    public Ground ground2;
+    public Ground ground3;
+    public Ground ground4;
+    public Ground ground5;
+
     private Paint siyah;
     private Physics physic;
     private Bitmap tempImage;
@@ -43,6 +50,94 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void setup() {
+
+        tempImage = Utils.loadImage(root,"gameObj1.png");
+        ground1 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),//tilesourcew
+                tempImage.getHeight(), // tile source h
+                tempImage.getWidth(), //tiledestinaion w
+                tempImage.getHeight(),//tile destination h
+                0,
+                0,
+                getWidth()-250,
+                getHeight()-100,
+                new Rect(),
+                new Rect(),
+                true
+        ));
+
+        tempImage = Utils.loadImage(root,"gameObj2.png");
+        ground2 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),     //tilesourcew
+                tempImage.getHeight(),    // tile source h
+                tempImage.getWidth(),     //tiledestinaion w
+                tempImage.getHeight(),    //tile destination h
+                0,
+                0,
+                this.getWidth()/2,
+                this.getHeight()/2,
+                new Rect(),
+                new Rect(),
+                true
+
+        ));
+
+        tempImage = Utils.loadImage(root,"gameObj2.png");
+        ground3 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),     //tilesourcew
+                tempImage.getHeight(),    // tile source h
+                tempImage.getWidth(),     //tiledestinaion w
+                tempImage.getHeight(),    //tile destination h
+                0,
+                0,
+                this.getWidth()/2,
+                this.getHeight()/2,
+                new Rect(),
+                new Rect(),
+                true
+
+        ));
+
+        tempImage = Utils.loadImage(root,"gameObj4.png");
+        ground4 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                0,
+                0,
+                this.getWidth()/2,
+                this.getHeight()/2,
+                new Rect(),
+                new Rect(),
+                true
+        ));
+
+        tempImage = Utils.loadImage(root,"gameObj5.png");
+        ground5 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                tempImage.getWidth(),
+                tempImage.getHeight(),
+                0,
+                0,
+                this.getWidth()/2,
+                this.getHeight()/2,
+                new Rect(),
+                new Rect(),
+                true
+        ));
+
 
         tempImage = Utils.loadImage(root,"controller.png");
         controllerBg = new Background(
@@ -80,8 +175,7 @@ public class GameCanvas extends BaseCanvas {
                 false
         );
 
-        tempImage = Utils.loadImage(root,"ingame.png");
-
+        tempImage = Utils.loadImage(root,"BG.png");
         mainBackground = new Background(
                 tempImage,
                 false,
@@ -102,6 +196,7 @@ public class GameCanvas extends BaseCanvas {
         player = new Player();
         player.setTag("oyuncu");
         player.setPhysics(physic);
+
         tempImage = Utils.loadImage(root,"cowboy.png");
         player.setAnimation(new Animation(
                 tempImage,
@@ -117,22 +212,17 @@ public class GameCanvas extends BaseCanvas {
                 animationFrames,
                 2
         ));
-
         player.getAnimation().setPlayStatus(false);
 
-
-
-        olumcizgisi = new Ground();
+        olumcizgisi = new Ground(new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20));
         olumcizgisi.setTag("olumcizgisi");
-        olumcizgisi.setRect(new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20));
 
-        olumcizgisisol = new Ground();
+        olumcizgisisol = new Ground(new Rect(5,5,10,getHeight()-5));
         olumcizgisisol.setTag("olumcizgisisol");
-        olumcizgisisol.setRect(new Rect(5,5,10,getHeight()-5));
 
-        olumcizgisisag = new Ground();
+        olumcizgisisag = new Ground(new Rect(getWidth()-10,5,getWidth()-5,getHeight()-5));
         olumcizgisisag.setTag("olumcizgisisag");
-        olumcizgisisag.setRect(new Rect(getWidth()-10,5,getWidth()-5,getHeight()-5));
+
 
         siyah = new Paint(Color.BLACK);
         physic = new Physics();
@@ -143,7 +233,8 @@ public class GameCanvas extends BaseCanvas {
 
     public void update() {
 
-        physic.checkCollision(player,olumcizgisi,olumcizgisisag,olumcizgisisol);
+        physic.checkCollision(player,olumcizgisi);
+        //physic.checkCollision(player,olumcizgisi,olumcizgisisag,olumcizgisisol);
         physic.addGravity(player);
 
         if(player.getAnimation().getPlayStatus()){
@@ -153,19 +244,65 @@ public class GameCanvas extends BaseCanvas {
         }
 
         player.updateJump();
-
-        player.updateLocation();
+        player.updateLocation(getWidth());
         player.updateMovingStatus();
-        //Log.e("SONRA",""+player.getAnimation().getPlayStatus());
-
-        //Log.i("----FRAME----",""+player.getAnimation().getCurrentFrame());
-        Log.e("ONCE",""+player.getAnimation().getPlayStatus()+"//"+player.isOnGround()+"//"+player.canMoveLeft());
 
     }
 
     public void draw(Canvas canvas) {
 
         mainBackground.drawBackground(canvas,getWidth(),getHeight());
+
+        ground1.getBackground().drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                (getWidth()-500)/2,
+                (getHeight()-100)/2,
+                512,
+                128
+        );
+
+        ground2.getBackground().drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                (getWidth()/2)-400,
+                (getHeight()/2)+200,
+                400,
+                150
+        );
+
+        ground3.getBackground().drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                (getWidth()/2)+400,
+                (getHeight()/2)+200,
+                200,
+                100
+        );
+
+        ground4.getBackground().drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                (getWidth()/2)-900,
+                (getHeight()/2)+50,
+                400,
+                150
+        );
+
+        ground5.getBackground().drawBackgroundTo(
+                canvas,
+                getWidth(),
+                getHeight(),
+                (getWidth()/2)+489,
+                (getHeight()/2)+50,
+                400,
+                150
+        );
+
         controllerBg.drawBackgroundTo(
                 canvas,
                 getWidth(),

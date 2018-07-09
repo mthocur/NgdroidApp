@@ -6,8 +6,17 @@ public class Ground extends GameObject {
 
 
     protected Rect rect;
-    public Background background;
+    private Background background;
     public boolean collider = true;
+
+    public Ground(){}
+
+    public Ground(Background background){
+        this.background = background;
+    }
+    public Ground(Rect rect){
+        this.rect = rect;
+    }
 
     public Rect getRect() {
         return rect;
@@ -15,6 +24,18 @@ public class Ground extends GameObject {
 
     public void setRect(Rect rect) {
         this.rect = rect;
+    }
+
+    public Rect getBgRect(){
+        return background.getDestinationRect();
+    }
+
+    public Background getBackground() {
+        return background;
+    }
+
+    public void setBackground(Background background) {
+        this.background = background;
     }
 
 

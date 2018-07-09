@@ -50,7 +50,7 @@ public class Physics {
                                         if( ((Player) obj ).getAnimation().getSpriteDestination().top > ((Ground) obj2).getRect().top ){
                                             //Log.e("Physics","oyuncu aşağıda");
                                         }else{
-                                            Log.e("Physics","oyuncu üstte");
+                                            //Log.e("Physics","oyuncu üstte");
                                             ((Player) obj).setOnGround(true);
                                             ((Player) obj).setFalling(false);
                                             ((Player) obj ).setCanMoveRight(true);
@@ -63,7 +63,7 @@ public class Physics {
                                         //Log.e("Physics","yatay çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
                                         //oyuncu nesnenin sağında mı solunda mı? sağa mı sola mı gidememeli?
                                         if( ((Player) obj ).getAnimation().getSpriteDestination().left > ((Ground) obj2).getRect().left ){
-                                            Log.e("Physics","oyuncu solda");
+                                            //Log.e("Physics","oyuncu solda");
                                             //((Player) obj ).stop();
                                             ((Player) obj ).setCanMoveRight(false);
                                             ((Player) obj ).setCanMoveLeft(true);
@@ -71,7 +71,7 @@ public class Physics {
 
 
                                         }else{
-                                            Log.e("Physics","oyuncu sağda");
+                                            //Log.e("Physics","oyuncu sağda");
                                             //((Player) obj ).stop();
                                             ((Player) obj ).setCanMoveRight(true);
                                             ((Player) obj ).setCanMoveLeft(false);
