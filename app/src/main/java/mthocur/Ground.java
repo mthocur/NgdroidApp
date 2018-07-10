@@ -19,7 +19,7 @@ public class Ground extends GameObject {
     }
 
     public Rect getRect() {
-        return rect;
+        return background.getDestinationRect();
     }
 
     public void setRect(Rect rect) {

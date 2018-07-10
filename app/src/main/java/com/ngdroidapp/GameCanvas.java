@@ -23,20 +23,20 @@ import mthocur.Player;
 
 public class GameCanvas extends BaseCanvas {
 
-    public Player player;
-    public Background mainBackground;
-    public Background jumpButton;
-    public Background controllerBg;
-    public int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
+    private Player player;
+    private Background mainBackground;
+    private Background jumpButton;
+    private Background controllerBg;
+    private int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
     private Ground olumcizgisi;
     private Ground olumcizgisisol;
     private Ground olumcizgisisag;
 
-    public Ground ground1;
-    public Ground ground2;
-    public Ground ground3;
-    public Ground ground4;
-    public Ground ground5;
+    private Ground ground1;
+    private Ground ground2;
+    private Ground ground3;
+    private Ground ground4;
+    private Ground ground5;
 
     private Paint siyah;
     private Physics physic;
@@ -214,6 +214,7 @@ public class GameCanvas extends BaseCanvas {
         ));
         player.getAnimation().setPlayStatus(false);
 
+        /*
         olumcizgisi = new Ground(new Rect(10,getHeight()-50,getWidth()-10,getHeight()-20));
         olumcizgisi.setTag("olumcizgisi");
 
@@ -222,6 +223,7 @@ public class GameCanvas extends BaseCanvas {
 
         olumcizgisisag = new Ground(new Rect(getWidth()-10,5,getWidth()-5,getHeight()-5));
         olumcizgisisag.setTag("olumcizgisisag");
+        */
 
 
         siyah = new Paint(Color.BLACK);
@@ -233,8 +235,8 @@ public class GameCanvas extends BaseCanvas {
 
     public void update() {
 
-        physic.checkCollision(player,olumcizgisi);
-        //physic.checkCollision(player,olumcizgisi,olumcizgisisag,olumcizgisisol);
+        //physic.checkCollision(player,olumcizgisi);
+        physic.checkCollision(player,ground1,ground3);
         physic.addGravity(player);
 
         if(player.getAnimation().getPlayStatus()){
@@ -253,6 +255,8 @@ public class GameCanvas extends BaseCanvas {
 
         mainBackground.drawBackground(canvas,getWidth(),getHeight());
 
+
+        //orta zemin
         ground1.getBackground().drawBackgroundTo(
                 canvas,
                 getWidth(),
@@ -263,45 +267,41 @@ public class GameCanvas extends BaseCanvas {
                 128
         );
 
+        //sol üst zemin
         ground2.getBackground().drawBackgroundTo(
                 canvas,
                 getWidth(),
                 getHeight(),
-                (getWidth()/2)-400,
-                (getHeight()/2)+200,
-                400,
-                150
+                getWidth()/20,
+                getHeight()/4,
+                ground4.getBackground().getImage().getWidth()*2,
+                ground4.getBackground().getImage().getHeight()
         );
 
+        //sağ üst zemin
         ground3.getBackground().drawBackgroundTo(
                 canvas,
                 getWidth(),
                 getHeight(),
-                (getWidth()/2)+400,
-                (getHeight()/2)+200,
-                200,
-                100
+                getWidth()-(ground4.getBackground().getImage().getWidth()*2+getWidth()/20),
+                getHeight()/4,
+                ground4.getBackground().getImage().getWidth()*2,
+                ground4.getBackground().getImage().getHeight()
         );
 
-        ground4.getBackground().drawBackgroundTo(
-                canvas,
-                getWidth(),
-                getHeight(),
-                (getWidth()/2)-900,
-                (getHeight()/2)+50,
-                400,
-                150
-        );
+        //en alttaki ana zemin
+        for(int i =0;i<=getWidth();i+=ground2.getBackground().getImage().getWidth()){
+            ground2.getBackground().drawBackgroundTo(
+                    canvas,
+                    getWidth(),
+                    getHeight(),
+                    i,
+                    getHeight()-ground2.getBackground().getImage().getHeight(),
+                    i+ground2.getBackground().getImage().getWidth(),
+                    getHeight()
+            );
+        }
 
-        ground5.getBackground().drawBackgroundTo(
-                canvas,
-                getWidth(),
-                getHeight(),
-                (getWidth()/2)+489,
-                (getHeight()/2)+50,
-                400,
-                150
-        );
 
         controllerBg.drawBackgroundTo(
                 canvas,
@@ -321,11 +321,11 @@ public class GameCanvas extends BaseCanvas {
 
         player.getAnimation().drawToCanvas(canvas);
         //Log.i("as","draw");
-
+/*
         canvas.drawRect(olumcizgisi.getRect(),siyah);
         canvas.drawRect(olumcizgisisol.getRect(),siyah);
         canvas.drawRect(olumcizgisisag.getRect(),siyah);
-
+*/
     }
 
     public void keyPressed(int key) {

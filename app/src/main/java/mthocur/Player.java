@@ -125,7 +125,7 @@ public class Player extends GameObject {
 
         if(isMovingLeft() || isMovingRight()){
             if(isJumping()){
-                if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 100){
+                if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 300){
                     //player.getAnimation().setPlayStatus(false);
                     intervalY = 0;
                     setJumping(false);
@@ -136,7 +136,7 @@ public class Player extends GameObject {
             }
         }
         if(isJumping()){
-            if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 100){
+            if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 300){
                 getAnimation().setPlayStatus(false);
                 intervalY = 0;
                 setJumping(false);

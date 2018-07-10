@@ -40,6 +40,7 @@ public class Physics {
                             }else if(obj2.getClass() == Ground.class){
                                 //Log.i("1","oyuncu x "+obj2.getClass());
                                 //çarpışma var mı?
+
                                 if(((Player) obj ).getAnimation().getSpriteDestination().intersect( ((Ground) obj2).getRect() )){
                                     //çarğışma dikey mi yatay mı?
 
@@ -79,7 +80,13 @@ public class Physics {
                                         }
                                     }
 
+                                }else{
+                                    ((Player) obj).setFalling(true);
+                                    ((Player) obj ).setCanMoveRight(true);
+                                    ((Player) obj ).setCanMoveLeft(true);
+
                                 }
+
                                 /*
                                 if(((Player) obj ).getAnimation().getSpriteDestination().intersect( ((Ground) obj2).getRect() )){
                                     //Log.i("2","oyuncu x "+obj2.getClass());
