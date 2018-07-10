@@ -19,6 +19,9 @@ public class Physics {
 
     private boolean colliding = false;
 
+    private Rect check1;
+    private Rect check2;
+
     public void addGravity(Player player){
 
         if(!player.isOnGround() && !player.isJumping()){
@@ -40,30 +43,37 @@ public class Physics {
                             }else if(obj2.getClass() == Ground.class){
                                 //Log.i("1","oyuncu x "+obj2.getClass());
                                 //çarpışma var mı?
+                                check1 = new Rect( ((Player) obj).getAnimation().getSpriteDestination() );
+                                check2 = new Rect( ((Ground) obj2).getRect() );
 
-                                if(((Player) obj ).getAnimation().getSpriteDestination().intersect( ((Ground) obj2).getRect() )){
+                                if(check1.intersect( check2 )){
+                                    Log.e("Physics","çarpışma: ");
+
                                     //çarğışma dikey mi yatay mı?
+                                    //Log.i("22",""+((Ground) obj2).getTag());
+                                    if(Collision.checkVerticalCollision( check1 , check2 )){
 
-                                    if(Collision.checkVerticalCollision( ((Player) obj ).getAnimation().getSpriteDestination() , ((Ground) obj2).getRect() )){
                                         //yatay çarpışma
-                                        //Log.e("Physics","dikey çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
+                                        Log.e("Physics","dikey çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
                                         //oyuncu nesnenin üstünde mi altında mı? düşmeli mi? yürüyebilmeli mi?
-                                        if( ((Player) obj ).getAnimation().getSpriteDestination().top > ((Ground) obj2).getRect().top ){
-                                            //Log.e("Physics","oyuncu aşağıda");
-                                        }else{
-                                            //Log.e("Physics","oyuncu üstte");
+                                        if( ((Player) obj ).getAnimation().getSpriteDestination().top > ((Ground) obj2).getRect().top && ((Player) obj ).getAnimation().getSpriteDestination().bottom > ((Ground) obj2).getRect().bottom  ){
+                                            Log.e("Physics","oyuncu üstte");
                                             ((Player) obj).setOnGround(true);
                                             ((Player) obj).setFalling(false);
                                             ((Player) obj ).setCanMoveRight(true);
                                             ((Player) obj ).setCanMoveLeft(true);
-
+                                        }else{
+                                            Log.e("Physics","oyuncu altta");
+                                            ((Player) obj).setOnGround(false);
+                                            ((Player) obj).setFalling(true);
+                                            ((Player) obj ).setCanMoveRight(false);
+                                            ((Player) obj ).setCanMoveLeft(false);
                                         }
-                                    }
-                                    if(Collision.checkHorizontalCollision( ((Player) obj ).getAnimation().getSpriteDestination() , ((Ground) obj2).getRect() )){
+                                    }/*else if(Collision.checkHorizontalCollision( check1 , check2 )){
                                         //yatay çarpışma
                                         //Log.e("Physics","yatay çarpışma: "+((Player) obj ).getTag()+"*"+((Ground) obj2).getTag());
                                         //oyuncu nesnenin sağında mı solunda mı? sağa mı sola mı gidememeli?
-                                        if( ((Player) obj ).getAnimation().getSpriteDestination().left > ((Ground) obj2).getRect().left ){
+                                        if( ((Player) obj ).getAnimation().getSpriteDestination().left > ((Ground) obj2).getRect().left && ((Player) obj ).getAnimation().getSpriteDestination().right > ((Ground) obj2).getRect().right ){
                                             //Log.e("Physics","oyuncu solda");
                                             //((Player) obj ).stop();
                                             ((Player) obj ).setCanMoveRight(false);
@@ -78,12 +88,16 @@ public class Physics {
                                             ((Player) obj ).setCanMoveLeft(false);
                                             ((Player) obj ).setFalling(true);
                                         }
-                                    }
+                                    }*/
 
                                 }else{
-                                    ((Player) obj).setFalling(true);
-                                    ((Player) obj ).setCanMoveRight(true);
-                                    ((Player) obj ).setCanMoveLeft(true);
+                                    if( !((Player) obj).isOnGround() ){
+                                        ((Player) obj).setFalling(true);
+                                        ((Player) obj).setOnGround(false);
+                                        ((Player) obj ).setCanMoveRight(true);
+                                        ((Player) obj ).setCanMoveLeft(true);
+                                    }
+
 
                                 }
 

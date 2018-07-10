@@ -75,7 +75,6 @@ public class Player extends GameObject {
         jumping = false;
         crouching = false;
         stop = true;
-
         this.animation.setSpriteRow(this.animation.getSpriteRowStop());
         this.animation.setPlayStatus(false);
     }
@@ -109,6 +108,7 @@ public class Player extends GameObject {
     public void jump(){
         stop = false;
         if(!jumping){
+            setOnGround(false);
             jumping = true;
             animation.setPlayStatus(true);
             intervalY = -1;
@@ -158,15 +158,19 @@ public class Player extends GameObject {
     }
 
     public void updateLocation(int width){
+        Log.i("7777",""+isOnGround());
+        if(!isOnGround() && !isJumping()){
+            setFalling(true);
+
+        }
         if( animation.getSpriteDestinationX()/2  <= 0){
             canMoveLeft = false;
             animation.setSpriteDestinationX( animation.getSpriteDestinationW()/8-2 );
         }
-        if( animation.getSpriteDestinationX() >=  width){
+        if( animation.getSpriteDestinationX() >= width- animation.getSpriteDestinationW()){
             canMoveRight = false;
-            animation.setSpriteDestinationX( width-animation.getSpriteDestinationW() );
+            animation.setSpriteDestinationX( width- animation.getSpriteDestinationW() );
         }
-
         velocityX = animation.getSpriteDestinationW()/8;
         velocityY = animation.getSpriteDestinationH()/8;
         if(!stop &&(movingLeft || movingRight|| jumping || crouching)){

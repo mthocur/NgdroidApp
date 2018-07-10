@@ -37,6 +37,7 @@ public class GameCanvas extends BaseCanvas {
     private Ground ground3;
     private Ground ground4;
     private Ground ground5;
+    private Ground ground6;
 
     private Paint siyah;
     private Physics physic;
@@ -121,14 +122,14 @@ public class GameCanvas extends BaseCanvas {
                 true
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj5.png");
+        tempImage = Utils.loadImage(root,"gameObj2.png");
         ground5 = new Ground(new Background(
                 tempImage,
                 false,
-                tempImage.getWidth(),
-                tempImage.getHeight(),
-                tempImage.getWidth(),
-                tempImage.getHeight(),
+                tempImage.getWidth(),     //tilesourcew
+                tempImage.getHeight(),    // tile source h
+                tempImage.getWidth(),     //tiledestinaion w
+                tempImage.getHeight(),    //tile destination h
                 0,
                 0,
                 this.getWidth()/2,
@@ -137,6 +138,31 @@ public class GameCanvas extends BaseCanvas {
                 new Rect(),
                 true
         ));
+
+        tempImage = Utils.loadImage(root,"gameObj2.png");
+        ground6 = new Ground(new Background(
+                tempImage,
+                false,
+                tempImage.getWidth(),     //tilesourcew
+                tempImage.getHeight(),    // tile source h
+                tempImage.getWidth(),     //tiledestinaion w
+                tempImage.getHeight(),    //tile destination h
+                0,
+                0,
+                this.getWidth()/2,
+                this.getHeight()/2,
+                new Rect(),
+                new Rect(),
+                true
+
+        ));
+
+        ground1.setTag("gr1");
+        ground2.setTag("gr2");
+        ground3.setTag("gr3");
+        ground4.setTag("gr4");
+        ground5.setTag("gr5");
+        ground5.setTag("gr6");
 
 
         tempImage = Utils.loadImage(root,"controller.png");
@@ -207,8 +233,8 @@ public class GameCanvas extends BaseCanvas {
                 0,
                 256,
                 256,
-                100,
-                100,
+                getWidth()/20,
+                getHeight()/4-ground2.getBackground().getTileDestinationH()*3,
                 animationFrames,
                 2
         ));
@@ -236,8 +262,10 @@ public class GameCanvas extends BaseCanvas {
     public void update() {
 
         //physic.checkCollision(player,olumcizgisi);
-        physic.checkCollision(player,ground1,ground3);
+        physic.checkCollision(player,ground1,ground2,ground3,ground5,ground6);
         physic.addGravity(player);
+
+        //player.setOnGround(true);
 
         if(player.getAnimation().getPlayStatus()){
             player.getAnimation().playAnimation(true);
@@ -248,6 +276,8 @@ public class GameCanvas extends BaseCanvas {
         player.updateJump();
         player.updateLocation(getWidth());
         player.updateMovingStatus();
+
+        Log.i("123123",""+player.isFalling());
 
     }
 
@@ -279,7 +309,7 @@ public class GameCanvas extends BaseCanvas {
         );
 
         //sağ üst zemin
-        ground3.getBackground().drawBackgroundTo(
+        ground5.getBackground().drawBackgroundTo(
                 canvas,
                 getWidth(),
                 getHeight(),
@@ -291,7 +321,7 @@ public class GameCanvas extends BaseCanvas {
 
         //en alttaki ana zemin
         for(int i =0;i<=getWidth();i+=ground2.getBackground().getImage().getWidth()){
-            ground2.getBackground().drawBackgroundTo(
+            ground6.getBackground().drawBackgroundTo(
                     canvas,
                     getWidth(),
                     getHeight(),
@@ -401,6 +431,7 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchUp(int x, int y, int id) {
+        player.stop();
         player.getAnimation().setPlayStatus(false);
     }
 

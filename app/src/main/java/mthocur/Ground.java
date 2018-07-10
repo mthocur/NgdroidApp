@@ -5,7 +5,6 @@ import android.graphics.Rect;
 public class Ground extends GameObject {
 
 
-    protected Rect rect;
     private Background background;
     public boolean collider = true;
 
@@ -14,20 +13,13 @@ public class Ground extends GameObject {
     public Ground(Background background){
         this.background = background;
     }
-    public Ground(Rect rect){
-        this.rect = rect;
-    }
 
     public Rect getRect() {
         return background.getDestinationRect();
     }
 
-    public void setRect(Rect rect) {
-        this.rect = rect;
-    }
-
-    public Rect getBgRect(){
-        return background.getDestinationRect();
+    public void setRect(Rect rect){
+        background.setDestinationRect(rect);
     }
 
     public Background getBackground() {
