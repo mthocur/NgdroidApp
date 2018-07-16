@@ -34,12 +34,14 @@ public class Player extends GameObject {
     private boolean crouching = false;
     private boolean stop = true;
 
+    public boolean aktif = true;
 
     private boolean onGround = false;
     private boolean falling = false;
 
     private int jumpStartY = 0;
     private int jumpMaxY = 100;
+    private int JumpingNumber = 4;
 
 
 
@@ -75,6 +77,22 @@ public class Player extends GameObject {
         jumping = false;
         crouching = false;
         stop = true;
+
+        intervalX = 0;
+        intervalY = 0;
+
+        this.animation.setSpriteRow(this.animation.getSpriteRowStop());
+        this.animation.setPlayStatus(false);
+    }
+    public void stopMove(){
+        movingLeft = false;
+        movingRight = false;
+        crouching = false;
+     //   stop = true;
+
+        intervalX = 0;
+
+
         this.animation.setSpriteRow(this.animation.getSpriteRowStop());
         this.animation.setPlayStatus(false);
     }
@@ -82,7 +100,7 @@ public class Player extends GameObject {
 
     public void walkRight(){
 
-        if(isOnGround() && canMoveRight){
+        if(canMoveRight){
             stop = false;
             movingLeft = false;
             movingRight = true;
@@ -95,7 +113,7 @@ public class Player extends GameObject {
     }
 
     public void walkLeft(){
-        if(isOnGround() && canMoveLeft){
+        if(canMoveLeft){
             stop = false;
             movingRight = false;
             movingLeft = true;
@@ -107,14 +125,14 @@ public class Player extends GameObject {
 
     public void jump(){
         stop = false;
-        if(!jumping){
+        if(!jumping && (isOnGround() || getJumpingNumber() != 0 )){
+            if(getJumpingNumber() != 0)
+                setJumpingNumber(getJumpingNumber() - 1);
             setOnGround(false);
             jumping = true;
             animation.setPlayStatus(true);
             intervalY = -1;
-            if(!movingRight || !movingLeft){
-                intervalX = 0;
-            }
+
             //animation.setSpriteIntervalX(0);
             setJumpStartY(animation.getSpriteDestinationY());
         }
@@ -125,10 +143,12 @@ public class Player extends GameObject {
 
         if(isMovingLeft() || isMovingRight()){
             if(isJumping()){
-                if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 300){
+                if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= (animation.getSpriteDestinationW())){
                     //player.getAnimation().setPlayStatus(false);
+                   // Log.i("----------Jumppp","draw");
                     intervalY = 0;
                     setJumping(false);
+                    aktif = false;
                 }
                 setFalling(true);
                 setOnGround(false);
@@ -136,18 +156,26 @@ public class Player extends GameObject {
             }
         }
         if(isJumping()){
-            if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >= 300){
+            if(getJumpStartY() -  getAnimation().getSpriteDestinationY() >=(animation.getSpriteDestinationW())){
                 getAnimation().setPlayStatus(false);
                 intervalY = 0;
                 setJumping(false);
+                aktif = false;
+             //   Log.i("------------Jump","draw");
             }
             setFalling(true);
             setOnGround(false);
 
+        }if(!isJumping()){
+            intervalY = 0;
         }
+
         if(!isJumping() && isOnGround() && (isMovingLeft() || isMovingRight())){
             getAnimation().setPlayStatus(true);
         }
+       // if(isOnGround()){
+       //     setJumping(false);
+       // }
 
     }
 
@@ -158,11 +186,15 @@ public class Player extends GameObject {
     }
 
     public void updateLocation(int width){
-        Log.i("7777",""+isOnGround());
+   //     Log.i("7777",""+isOnGround());
         if(!isOnGround() && !isJumping()){
             setFalling(true);
 
         }
+        if(isOnGround()){
+            setJumpingNumber(4);
+        }
+
         if( animation.getSpriteDestinationX()/2  <= 0){
             canMoveLeft = false;
             animation.setSpriteDestinationX( animation.getSpriteDestinationW()/8-2 );
@@ -174,6 +206,7 @@ public class Player extends GameObject {
         velocityX = animation.getSpriteDestinationW()/8;
         velocityY = animation.getSpriteDestinationH()/8;
         if(!stop &&(movingLeft || movingRight|| jumping || crouching)){
+         //   Log.i("eqeqwewqewq","qweweqeqwe" + intervalY);
             animation.setSpriteDestinationX( animation.getSpriteDestinationX() + velocityX * intervalX );
             animation.setSpriteDestinationY( animation.getSpriteDestinationY() + velocityY * intervalY );
         }
@@ -298,6 +331,16 @@ public class Player extends GameObject {
 
     public void setCrouching(boolean crouching) {
         this.crouching = crouching;
+    }
+
+
+
+
+    public int getJumpingNumber() {
+        return JumpingNumber;
+    }
+    public void setJumpingNumber(int JumpingNumber) {
+        this.JumpingNumber = JumpingNumber;
     }
 
     public int getJumpStartY() {

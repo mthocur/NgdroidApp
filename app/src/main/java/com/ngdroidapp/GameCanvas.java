@@ -10,6 +10,7 @@ import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
 import istanbul.gamelab.ngdroid.util.Utils;
 import mthocur.Background;
+import mthocur.Collision;
 import mthocur.Ground;
 import mthocur.Physics;
 import mthocur.Player;
@@ -41,16 +42,26 @@ public class GameCanvas extends BaseCanvas {
 
     private Paint siyah;
     private Physics physic;
-    private Bitmap tempImage;
+    private Bitmap tempImage, bitmap1, bitmap2, bitmap3, bitmap4;
+
+    private Rect check1;
+    private Rect check2, check3;
+
 
     private int touchDownPosX;
     private int touchDownPosY;
+
+    private int deneme;
 
     public GameCanvas(NgApp ngApp) {
         super(ngApp);
     }
 
     public void setup() {
+        deneme = 0;
+        check1 = new Rect(0,0,0,0);
+        check2 = new Rect(0,0,0,0);
+        check3 = new Rect(0,0,512,512);
 
         tempImage = Utils.loadImage(root,"gameObj1.png");
         ground1 = new Ground(new Background(
@@ -261,8 +272,15 @@ public class GameCanvas extends BaseCanvas {
 
     public void update() {
 
+        Log.i("*******", ""+ player.isJumping());
         //physic.checkCollision(player,olumcizgisi);
         physic.checkCollision(player,ground1,ground2,ground3,ground5,ground6);
+       // physic.checkCollision(player,ground2);
+      //  physic.checkCollision(player,ground3);
+      //  physic.checkCollision(player,ground5);
+      //  physic.checkCollision(player,ground6);
+
+
         physic.addGravity(player);
 
         //player.setOnGround(true);
@@ -273,12 +291,14 @@ public class GameCanvas extends BaseCanvas {
             player.getAnimation().playAnimation(false);
         }
 
+
+
         player.updateJump();
         player.updateLocation(getWidth());
         player.updateMovingStatus();
 
-        Log.i("123123",""+player.isFalling());
-
+    //    Log.i("123123",""+player.isOnGround());
+     //   Log.i("2222222222222","draw"+ check2.left);
     }
 
     public void draw(Canvas canvas) {
@@ -349,6 +369,7 @@ public class GameCanvas extends BaseCanvas {
                 getHeight()-jumpButton.getImage().getHeight()
         );
 
+
         player.getAnimation().drawToCanvas(canvas);
         //Log.i("as","draw");
 /*
@@ -357,6 +378,7 @@ public class GameCanvas extends BaseCanvas {
         canvas.drawRect(olumcizgisisag.getRect(),siyah);
 */
     }
+
 
     public void keyPressed(int key) {
 
@@ -385,6 +407,8 @@ public class GameCanvas extends BaseCanvas {
     public void touchDown(int x, int y, int id) {
         touchDownPosX = x;
         touchDownPosY = y;
+        Log.i("------" ,"--- " + x);
+        Log.i("------" ,"--- " + y);
         /**
          * x , y
          * 1. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()
@@ -396,6 +420,7 @@ public class GameCanvas extends BaseCanvas {
          * 7. controllerBg.getImage().getWidth() , getHeight()-controllerBg.getImage().getHeight()
          * 8. controllerBg.getImage().getWidth() , getHeight()
          * 9. 0 , getHeight()
+         *oıkloık
          *
          *  buton alanı y 7> x 7<
          *
@@ -409,11 +434,11 @@ public class GameCanvas extends BaseCanvas {
             //buton rect içerisinde bir yere dokunuldu
             if(x > controllerBg.getImage().getWidth()/2 ){
                 player.walkRight();
-                Log.e("TD","SAĞ YÜRÜ");
+              //  Log.e("TD","SAĞ YÜRÜ");
 
             }else{
                 player.walkLeft();
-                Log.e("TD","SOL YÜRÜ");
+              //  Log.e("TD","SOL YÜRÜ");
 
             }
         }
@@ -421,7 +446,10 @@ public class GameCanvas extends BaseCanvas {
         if( y >= getHeight()-jumpButton.getImage().getHeight() && x >= getWidth()-jumpButton.getImage().getWidth() ){
             //buton rect içerisinde bir yere dokunuldu
             //jumpbuton koordinatları içerisinde bir yere dokunuldu
-            player.jump();
+            if(!player.isJumping()){
+               // Log.e("TD", "YÜRÜ" + player.isJumping());
+                player.jump();
+            }
         }
     }
 
@@ -431,8 +459,11 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchUp(int x, int y, int id) {
-        player.stop();
-        player.getAnimation().setPlayStatus(false);
+        if(!player.isJumping())
+       player.stopMove();
+        player.setCrouching(false);
+        //player.getAnimation().setPlayStatus(false);
+        //player.setOnGround(false);
     }
 
     public void pause() {

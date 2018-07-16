@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 
+import istanbul.gamelab.ngdroid.util.Log;
 public class Collision {
 
 
@@ -12,6 +13,10 @@ public class Collision {
         //dikey çarpışma testi
 
         if(r.left < r2.right && r2.left < r.right){
+            if(r.centerX() > r2.right)
+                return  false;
+            if(r.centerX() < r2.left)
+                return  false;
             return true;
         }
         return false;
@@ -47,6 +52,10 @@ public class Collision {
 
         Rect bounds1 = new Rect(x1, y1, x1+bitmap1.getWidth(), y1+bitmap1.getHeight());
         Rect bounds2 = new Rect(x2, y2, x2+bitmap2.getWidth(), y2+bitmap2.getHeight());
+
+      /*  Log.i("Collision", " bitmap " + x1);
+        Log.i("Collision", " Wigth " + bitmap1.getWidth());
+        Log.i("Collision", " Wigth " + bitmap1.getHeight());*/
 
         if (Rect.intersects(bounds1, bounds2)) {
             Rect collisionBounds = getCollisionBounds(bounds1, bounds2);
