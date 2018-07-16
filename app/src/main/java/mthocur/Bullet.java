@@ -5,6 +5,8 @@ public class Bullet extends GameObject {
     private boolean explode = false;
     private Background background;
     private int direction = 1;
+    private int speed = 50;
+    private boolean live = true;
 
     public int getSpeed() {
         return speed;
@@ -22,8 +24,7 @@ public class Bullet extends GameObject {
         this.live = live;
     }
 
-    private int speed = 30;
-    private boolean live = true;
+
 
     public Bullet(){}
 

@@ -64,7 +64,7 @@ public class Physics {
 
                                 if(intersects(check1, check2 )){
                               //  if(Collision.isCollisionDetected(bitmap1, check1.left, check1.top, bitmap2, check2.left, check2.top)){
-                                    Log.e("Physics","çarpışma: ");
+                                    //Log.e("Physics","çarpışma: ");
                                     //çarğışma dikey mi yatay mı?
                                     //Log.i("22",""+((Ground) obj2).getTag());
                                      if(Collision.checkVerticalCollision( check1 , check2 )){

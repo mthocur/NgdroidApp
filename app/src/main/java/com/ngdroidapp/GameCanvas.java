@@ -6,10 +6,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import istanbul.gamelab.ngdroid.base.BaseCanvas;
 import istanbul.gamelab.ngdroid.util.Log;
 import istanbul.gamelab.ngdroid.util.Utils;
 import mthocur.Background;
+import mthocur.Bullet;
 import mthocur.Collision;
 import mthocur.Ground;
 import mthocur.Physics;
@@ -28,7 +32,7 @@ public class GameCanvas extends BaseCanvas {
     private Background mainBackground;
     private Background jumpButton;
     private Background controllerBg;
-    private int[][] animationFrames= {{0,0},{1,8},{9,11},{11,13}};
+    private int[][] animationFrames = {{0, 0}, {1, 8}, {9, 11}, {11, 13}};
     private Ground olumcizgisi;
     private Ground olumcizgisisol;
     private Ground olumcizgisisag;
@@ -42,7 +46,9 @@ public class GameCanvas extends BaseCanvas {
 
     private Paint siyah;
     private Physics physic;
-    private Bitmap tempImage, bitmap1, bitmap2, bitmap3, bitmap4;
+    private Bitmap tempImage;
+    private Bitmap bulletimage;
+    private List<Bullet> bullets;
 
     private Rect check1;
     private Rect check2, check3;
@@ -51,19 +57,17 @@ public class GameCanvas extends BaseCanvas {
     private int touchDownPosX;
     private int touchDownPosY;
 
-    private int deneme;
 
     public GameCanvas(NgApp ngApp) {
         super(ngApp);
     }
 
     public void setup() {
-        deneme = 0;
-        check1 = new Rect(0,0,0,0);
-        check2 = new Rect(0,0,0,0);
-        check3 = new Rect(0,0,512,512);
 
-        tempImage = Utils.loadImage(root,"gameObj1.png");
+        bullets = new ArrayList<Bullet>();
+        bulletimage = Utils.loadImage(root, "gameObj5.png");
+
+        tempImage = Utils.loadImage(root, "gameObj1.png");
         ground1 = new Ground(new Background(
                 tempImage,
                 false,
@@ -73,14 +77,14 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),//tile destination h
                 0,
                 0,
-                getWidth()-250,
-                getHeight()-100,
+                getWidth() - 250,
+                getHeight() - 100,
                 new Rect(),
                 new Rect(),
                 true
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj2.png");
+        tempImage = Utils.loadImage(root, "gameObj2.png");
         ground2 = new Ground(new Background(
                 tempImage,
                 false,
@@ -90,15 +94,15 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),    //tile destination h
                 0,
                 0,
-                this.getWidth()/2,
-                this.getHeight()/2,
+                this.getWidth() / 2,
+                this.getHeight() / 2,
                 new Rect(),
                 new Rect(),
                 true
 
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj2.png");
+        tempImage = Utils.loadImage(root, "gameObj2.png");
         ground3 = new Ground(new Background(
                 tempImage,
                 false,
@@ -108,15 +112,15 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),    //tile destination h
                 0,
                 0,
-                this.getWidth()/2,
-                this.getHeight()/2,
+                this.getWidth() / 2,
+                this.getHeight() / 2,
                 new Rect(),
                 new Rect(),
                 true
 
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj4.png");
+        tempImage = Utils.loadImage(root, "gameObj4.png");
         ground4 = new Ground(new Background(
                 tempImage,
                 false,
@@ -126,14 +130,14 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),
                 0,
                 0,
-                this.getWidth()/2,
-                this.getHeight()/2,
+                this.getWidth() / 2,
+                this.getHeight() / 2,
                 new Rect(),
                 new Rect(),
                 true
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj2.png");
+        tempImage = Utils.loadImage(root, "gameObj2.png");
         ground5 = new Ground(new Background(
                 tempImage,
                 false,
@@ -143,14 +147,14 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),    //tile destination h
                 0,
                 0,
-                this.getWidth()/2,
-                this.getHeight()/2,
+                this.getWidth() / 2,
+                this.getHeight() / 2,
                 new Rect(),
                 new Rect(),
                 true
         ));
 
-        tempImage = Utils.loadImage(root,"gameObj2.png");
+        tempImage = Utils.loadImage(root, "gameObj2.png");
         ground6 = new Ground(new Background(
                 tempImage,
                 false,
@@ -160,8 +164,8 @@ public class GameCanvas extends BaseCanvas {
                 tempImage.getHeight(),    //tile destination h
                 0,
                 0,
-                this.getWidth()/2,
-                this.getHeight()/2,
+                this.getWidth() / 2,
+                this.getHeight() / 2,
                 new Rect(),
                 new Rect(),
                 true
@@ -176,7 +180,7 @@ public class GameCanvas extends BaseCanvas {
         ground5.setTag("gr6");
 
 
-        tempImage = Utils.loadImage(root,"controller.png");
+        tempImage = Utils.loadImage(root, "controller.png");
         controllerBg = new Background(
                 tempImage,
                 false,
@@ -194,7 +198,7 @@ public class GameCanvas extends BaseCanvas {
         );
 
 
-        tempImage = Utils.loadImage(root,"jump.png");
+        tempImage = Utils.loadImage(root, "jump.png");
 
         jumpButton = new Background(
                 tempImage,
@@ -212,7 +216,7 @@ public class GameCanvas extends BaseCanvas {
                 false
         );
 
-        tempImage = Utils.loadImage(root,"BG.png");
+        tempImage = Utils.loadImage(root, "BG.png");
         mainBackground = new Background(
                 tempImage,
                 false,
@@ -234,18 +238,18 @@ public class GameCanvas extends BaseCanvas {
         player.setTag("oyuncu");
         player.setPhysics(physic);
 
-        tempImage = Utils.loadImage(root,"cowboy.png");
+        tempImage = Utils.loadImage(root, "cowboy.png");
         player.setAnimation(new Animation(
                 tempImage,
-                new Rect(),new Rect(),
+                new Rect(), new Rect(),
                 128,
                 128,
                 0,
                 0,
                 256,
                 256,
-                getWidth()/20,
-                getHeight()/4-ground2.getBackground().getTileDestinationH()*3,
+                getWidth() / 20,
+                getHeight() / 4 - ground2.getBackground().getTileDestinationH() * 3,
                 animationFrames,
                 2
         ));
@@ -267,43 +271,45 @@ public class GameCanvas extends BaseCanvas {
         physic = new Physics();
 
 
-
     }
 
     public void update() {
 
-        Log.i("*******", ""+ player.isJumping());
+        //Log.i("*******", "" + player.isJumping());
         //physic.checkCollision(player,olumcizgisi);
-        physic.checkCollision(player,ground1,ground2,ground3,ground5,ground6);
-       // physic.checkCollision(player,ground2);
-      //  physic.checkCollision(player,ground3);
-      //  physic.checkCollision(player,ground5);
-      //  physic.checkCollision(player,ground6);
+        physic.checkCollision(player, ground1, ground2, ground3, ground5, ground6);
+        // physic.checkCollision(player,ground2);
+        //  physic.checkCollision(player,ground3);
+        //  physic.checkCollision(player,ground5);
+        //  physic.checkCollision(player,ground6);
 
 
         physic.addGravity(player);
 
         //player.setOnGround(true);
 
-        if(player.getAnimation().getPlayStatus()){
+        if (player.getAnimation().getPlayStatus()) {
             player.getAnimation().playAnimation(true);
-        }else{
+        } else {
             player.getAnimation().playAnimation(false);
         }
-
 
 
         player.updateJump();
         player.updateLocation(getWidth());
         player.updateMovingStatus();
+        player.updateBulletLocations(bullets);
 
-    //    Log.i("123123",""+player.isOnGround());
-     //   Log.i("2222222222222","draw"+ check2.left);
+
+        //    Log.i("123123",""+player.isOnGround());
+        //   Log.i("2222222222222","draw"+ check2.left);
     }
 
     public void draw(Canvas canvas) {
 
-        mainBackground.drawBackground(canvas,getWidth(),getHeight());
+
+
+        mainBackground.drawBackground(canvas, getWidth(), getHeight());
 
 
         //orta zemin
@@ -311,8 +317,8 @@ public class GameCanvas extends BaseCanvas {
                 canvas,
                 getWidth(),
                 getHeight(),
-                (getWidth()-500)/2,
-                (getHeight()-100)/2,
+                (getWidth() - 500) / 2,
+                (getHeight() - 100) / 2,
                 512,
                 128
         );
@@ -322,9 +328,9 @@ public class GameCanvas extends BaseCanvas {
                 canvas,
                 getWidth(),
                 getHeight(),
-                getWidth()/20,
-                getHeight()/4,
-                ground4.getBackground().getImage().getWidth()*2,
+                getWidth() / 20,
+                getHeight() / 4,
+                ground4.getBackground().getImage().getWidth() * 2,
                 ground4.getBackground().getImage().getHeight()
         );
 
@@ -333,21 +339,21 @@ public class GameCanvas extends BaseCanvas {
                 canvas,
                 getWidth(),
                 getHeight(),
-                getWidth()-(ground4.getBackground().getImage().getWidth()*2+getWidth()/20),
-                getHeight()/4,
-                ground4.getBackground().getImage().getWidth()*2,
+                getWidth() - (ground4.getBackground().getImage().getWidth() * 2 + getWidth() / 20),
+                getHeight() / 4,
+                ground4.getBackground().getImage().getWidth() * 2,
                 ground4.getBackground().getImage().getHeight()
         );
 
         //en alttaki ana zemin
-        for(int i =0;i<=getWidth();i+=ground2.getBackground().getImage().getWidth()){
+        for (int i = 0; i <= getWidth(); i += ground2.getBackground().getImage().getWidth()) {
             ground6.getBackground().drawBackgroundTo(
                     canvas,
                     getWidth(),
                     getHeight(),
                     i,
-                    getHeight()-ground2.getBackground().getImage().getHeight(),
-                    i+ground2.getBackground().getImage().getWidth(),
+                    getHeight() - ground2.getBackground().getImage().getHeight(),
+                    i + ground2.getBackground().getImage().getWidth(),
                     getHeight()
             );
         }
@@ -358,19 +364,38 @@ public class GameCanvas extends BaseCanvas {
                 getWidth(),
                 getHeight(),
                 0,
-                getHeight()-controllerBg.getImage().getHeight()
+                getHeight() - controllerBg.getImage().getHeight()
         );
 
         jumpButton.drawBackgroundTo(
                 canvas,
                 getWidth(),
                 getHeight(),
-                getWidth()-jumpButton.getImage().getWidth(),
-                getHeight()-jumpButton.getImage().getHeight()
+                getWidth() - jumpButton.getImage().getWidth(),
+                getHeight() - jumpButton.getImage().getHeight()
         );
 
 
         player.getAnimation().drawToCanvas(canvas);
+
+        if (!bullets.isEmpty()) {
+            for (int i = 0; i < bullets.size(); i++) {
+                Bullet blt = bullets.get(i);
+                if (blt.isLive()) {
+
+                    blt.getBackground().drawBackgroundTo(
+                            canvas,getWidth(),getHeight(),
+                            blt.getBackground().getTileDestinationX(),//left
+                            blt.getBackground().getTileDestinationY(),//top
+                            blt.getBackground().getImage().getWidth(),//right
+                            blt.getBackground().getImage().getHeight()//right
+
+                    );
+                } else {
+                    bullets.remove(i);
+                }
+            }
+        }
         //Log.i("as","draw");
 /*
         canvas.drawRect(olumcizgisi.getRect(),siyah);
@@ -407,8 +432,8 @@ public class GameCanvas extends BaseCanvas {
     public void touchDown(int x, int y, int id) {
         touchDownPosX = x;
         touchDownPosY = y;
-        Log.i("------" ,"--- " + x);
-        Log.i("------" ,"--- " + y);
+        Log.i("------", "--- " + x);
+        Log.i("------", "--- " + y);
         /**
          * x , y
          * 1. controllerBg.getImage().getWidth()/2 , getHeight()-controllerBg.getImage().getHeight()
@@ -430,25 +455,26 @@ public class GameCanvas extends BaseCanvas {
          * sol üst y 6> 5< x 1<
          * sol alt y 5> 9< x 1<
          */
-        if( y >= getHeight()-controllerBg.getImage().getHeight() && x <= controllerBg.getImage().getWidth() ){
+        if (y >= getHeight() - controllerBg.getImage().getHeight() && x <= controllerBg.getImage().getWidth()) {
             //buton rect içerisinde bir yere dokunuldu
-            if(x > controllerBg.getImage().getWidth()/2 ){
+            if (x > controllerBg.getImage().getWidth() / 2) {
                 player.walkRight();
-              //  Log.e("TD","SAĞ YÜRÜ");
+                //  Log.e("TD","SAĞ YÜRÜ");
 
-            }else{
+            } else {
                 player.walkLeft();
-              //  Log.e("TD","SOL YÜRÜ");
+                //  Log.e("TD","SOL YÜRÜ");
 
             }
         }
 
-        if( y >= getHeight()-jumpButton.getImage().getHeight() && x >= getWidth()-jumpButton.getImage().getWidth() ){
+        if (y >= getHeight() - jumpButton.getImage().getHeight() && x >= getWidth() - jumpButton.getImage().getWidth()) {
             //buton rect içerisinde bir yere dokunuldu
             //jumpbuton koordinatları içerisinde bir yere dokunuldu
-            if(!player.isJumping()){
-               // Log.e("TD", "YÜRÜ" + player.isJumping());
-                player.jump();
+            if (!player.isJumping()) {
+                // Log.e("TD", "YÜRÜ" + player.isJumping());
+                //player.jump();
+                player.shoot(root,bulletimage,bullets);
             }
         }
     }
@@ -459,8 +485,8 @@ public class GameCanvas extends BaseCanvas {
     }
 
     public void touchUp(int x, int y, int id) {
-        if(!player.isJumping())
-       player.stopMove();
+        if (!player.isJumping())
+            player.stopMove();
         player.setCrouching(false);
         //player.getAnimation().setPlayStatus(false);
         //player.setOnGround(false);
@@ -483,5 +509,6 @@ public class GameCanvas extends BaseCanvas {
 
     public void hideNotify() {
     }
+
 
 }

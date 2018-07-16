@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 
 import com.ngdroidapp.Animation;
+import com.ngdroidapp.NgApp;
 
 import java.lang.reflect.Array;
+import java.util.List;
 
 import istanbul.gamelab.ngdroid.util.Log;
 
@@ -42,8 +44,6 @@ public class Player extends GameObject {
     private int jumpStartY = 0;
     private int jumpMaxY = 100;
     private int JumpingNumber = 4;
-
-
 
     private int velocityX;
     private int velocityY;
@@ -210,6 +210,72 @@ public class Player extends GameObject {
             animation.setSpriteDestinationX( animation.getSpriteDestinationX() + velocityX * intervalX );
             animation.setSpriteDestinationY( animation.getSpriteDestinationY() + velocityY * intervalY );
         }
+    }
+
+    public void updateBulletLocations(List<Bullet> bullets){
+
+        if(!bullets.isEmpty()){
+            Log.i("Update/bullet","mermi listesi boş değil");
+            for (int i = 0; i < bullets.size(); i++) {
+                Bullet blt = bullets.get(i);
+                if(blt.isLive()){
+
+                    blt.getBackground().setTileDestinationX(blt.getBackground().getTileDestinationX() + blt.getSpeed()*blt.getDirection());
+                    Log.i("Update/bullet","merminin şuanki konumu "+blt.getBackground().getTileDestinationX());
+                }else{
+                    bullets.remove(i);
+                }
+            }
+        }
+
+
+    }
+
+    public void shoot(NgApp root, Bitmap bulletimage, List<Bullet> bullets) {
+        getDirection();
+        int bulletX;
+        if (getDirection() == 1) {
+            //bullet direction right
+            bulletX = getAnimation().getSpriteDestination().centerX() + (getAnimation().getSpriteDestinationW() / 2 * getDirection());
+            Log.i("sağa ateş", "bulletX:" + bulletX);
+        } else if (getDirection() == -1) {
+            //bullet direction left
+            bulletX = getAnimation().getSpriteDestination().centerX() + (getAnimation().getSpriteDestinationW() / 2 * getDirection());
+            Log.i("sola ateş", "bulletX:" + bulletX);
+
+        } else {
+            Log.i("ateş direction 0", "bulletX:");
+            bulletX = 0;
+        }
+
+        int bulletY = getAnimation().getSpriteDestination().centerY();
+
+
+        Bullet bullet = new Bullet(
+                new Background(
+                        bulletimage,
+                        false,
+                        bulletimage.getWidth(),     //tilesourcew
+                        bulletimage.getHeight(),    // tile source h
+                        bulletimage.getWidth(),     //tiledestinaion w
+                        bulletimage.getHeight(),    //tile destination h
+                        0,
+                        0,
+                        bulletX,
+                        bulletY,
+                        new Rect(),
+                        new Rect(),
+                        true
+                ),
+                getAttack(),
+                false,
+                true,
+                getDirection(),
+                30
+        );
+
+        bullets.add(bullet);
+
     }
 
     public void crouch(){
@@ -417,5 +483,14 @@ public class Player extends GameObject {
         this.intervalY = intervalY;
     }
 
+    public int getDirection(){
 
+        if(getAnimation().getSpriteRow() == 0){
+            return 1;
+        } else if(getAnimation().getSpriteRow() == 1){
+            return -1;
+        }else{
+            return 0;
+        }
+    }
 }
